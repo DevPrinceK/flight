@@ -42,7 +42,7 @@ class Seat(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.seat_num if self.seat_num else "seat"
+        return str(self.seat_num) if str(self.seat_num) else "seat"
 
     class Meta:
         db_table = 'seat'
@@ -68,7 +68,7 @@ class Trip(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.source if self.source else "trip"
+        return self.source + "-" + self.destination if self.source and self.destination else "trip"  # noqa
 
     class Meta:
         db_table = 'trip'
@@ -81,7 +81,7 @@ class Booking(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user if self.user else "booking"
+        return self.user.email if self.user.email else "booking"
 
     class Meta:
         db_table = 'booking'
