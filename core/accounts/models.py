@@ -12,14 +12,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    date_joined = models.DateTimeField(null=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = AccountManager()
 
     USERNAME_FIELD = 'email'
 
     def __str__(self):
-        return self.username if self.username else "user"
+        return self.email if self.email else "user"
 
     class Meta:
         db_table = 'user'
