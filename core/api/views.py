@@ -20,16 +20,17 @@ from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth import login
 
 
-class HomeAPIView(APIView):
+class OverviewAPI(APIView):
     '''endpoint for all endpoints'''
 
     def get(self, request, *args, **kwargs):
         end_points = {
+            'overview': '/api/',
             'login': '/api/login/',
             'sign-up': '/api/sign-up/',
             'all-trips': '/api/all-trips/',
             'trips-today': '/api/trips-today/',
-            'custom-trips': '/api/custom-trips/',
+            'search-trips': '/api/search-trips/',
             'bookings': '/api/bookings/',
             'book-trip': '/api/book-trip/',
         }
@@ -57,7 +58,7 @@ class TripsTodayAPI(APIView):
         return Response(serializer.data)
 
 
-class CustomTripsAPI(APIView):
+class SearchTripsAPI(APIView):
     '''endpoint for getting all trips for the day'''
     permission_classes = [permissions.AllowAny]
 
@@ -89,6 +90,18 @@ class BookTripAPI(APIView):
         booking = Booking.objects.create(seat=seat, user=user, trip=trip)
         serialized = serializers.serialize(queryset=[booking], format='json')
         return Response({"booking": serialized}, status=status.HTTP_201_CREATED)
+
+
+class UserBookings(APIView):
+    '''endpoint to get all trips booked by the user'''
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        user_id = request.data['user']
+        user = User.objects.filter(id=int(user_id)).first()
+        bookings = Booking.objects.filter(user=user)
+        serializer = BookingSerializer(bookings, many=True)
+        return Response(serializer.data)
 
 
 class LoginAPI(KnoxLoginView):
