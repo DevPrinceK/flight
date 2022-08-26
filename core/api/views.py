@@ -1,9 +1,12 @@
+from django.core import serializers
+import json
+from accounts.models import User
 import time
 from core import settings
-from backend.models import Transaction, Trip
+from backend.models import Booking, Seat, Transaction, Trip
 from django.shortcuts import render
 from django.views import View
-from api.serializers import RegisterSerializer, TripSerializer, UserSerializer
+from api.serializers import BookingSerializer, RegisterSerializer, TripSerializer, UserSerializer
 from rest_framework import generics, permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view
@@ -18,15 +21,16 @@ from django.contrib.auth import login
 
 
 class HomeAPIView(APIView):
-    '''Trial api endpoint'''
+    '''endpoint for all endpoints'''
 
     def get(self, request, *args, **kwargs):
         end_points = {
             'login': '/api/login/',
+            'sign-up': '/api/sign-up/',
             'all-trips': '/api/all-trips/',
             'trips-today': '/api/trips-today/',
-            'custom-trips': '/api/custom-trips',
-            'permissions': '/api/permissions/',
+            'custom-trips': '/api/custom-trips/',
+            'bookings': '/api/bookings/',
         }
         return Response(end_points)
 
@@ -68,6 +72,25 @@ class CustomTripsAPI(APIView):
             return Response(serializer.data)
         else:
             return Response({"error": "No trips found for your source and destination"}, status=status.HTTP_404_NOT_FOUND)  # noqa
+
+
+class BookTripAPI(APIView):
+    '''endpoint to book trips'''
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        trip_id = request.data['trip']
+        user_id = request.data['user']
+        seat_id = request.data['seat']
+        trip = Trip.objects.filter(id=int(trip_id)).first()
+        user = User.objects.filter(id=int(user_id)).first()
+        seat = Seat.objects.filter(id=int(seat_id)).first()
+        # serializer = BookingSerializer(data={"trip": trip, "seat": seat, "user": user})  # noqa
+        # serializer.is_valid(raise_exception=True)
+        # booking = serializer.save()
+        booking = Booking.objects.create(seat=seat, user=user, trip=trip)
+        serialized = serializers.serialize(queryset=[booking], format='json')
+        return Response({"booking": serialized}, status=status.HTTP_201_CREATED)
 
 
 class LoginAPI(KnoxLoginView):
