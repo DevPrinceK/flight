@@ -1,7 +1,7 @@
 from email.policy import default
 from django.contrib.auth import authenticate
 from accounts.models import User
-from backend.models import Transaction, Trip
+from backend.models import Booking, Transaction, Trip
 from rest_framework import serializers
 from rest_framework.response import Response
 
@@ -25,6 +25,15 @@ class TripWithSourceNDestinationSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
+        fields = '__all__'
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(write_only=True)
+    seat = serializers.IntegerField(write_only=True)
+    trip = serializers.IntegerField(write_only=True)
+    class Meta:
+        model = Booking
         fields = '__all__'
 
 
@@ -57,10 +66,10 @@ class LoginSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('email', 'password')
+        fields = ('first_name', 'last_name', 'email', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create_user(
-            email=validated_data['email'], password=validated_data['password'])
+            email=validated_data['email'], password=validated_data['password'], first_name=validated_data['first_name'], last_name=validated_data['last_name'])
         return user
