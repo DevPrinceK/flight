@@ -8,4 +8,5 @@ urlpatterns = [
     path('all-trips/', views.AllTripsAPI.as_view(), name="all_trips"),
     path('trips-today/', views.TripsTodayAPI.as_view(), name="trips_today"),
     path('custom-trips/', views.CustomTripsAPI.as_view(), name="custom_trips"),  # noqa
+    path('book-trip/', views.BookTripAPI.as_view(), name="book_trip"),
 ]
