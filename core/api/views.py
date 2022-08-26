@@ -31,6 +31,7 @@ class HomeAPIView(APIView):
             'trips-today': '/api/trips-today/',
             'custom-trips': '/api/custom-trips/',
             'bookings': '/api/bookings/',
+            'book-trip': '/api/book-trip/',
         }
         return Response(end_points)
 
@@ -85,9 +86,6 @@ class BookTripAPI(APIView):
         trip = Trip.objects.filter(id=int(trip_id)).first()
         user = User.objects.filter(id=int(user_id)).first()
         seat = Seat.objects.filter(id=int(seat_id)).first()
-        # serializer = BookingSerializer(data={"trip": trip, "seat": seat, "user": user})  # noqa
-        # serializer.is_valid(raise_exception=True)
-        # booking = serializer.save()
         booking = Booking.objects.create(seat=seat, user=user, trip=trip)
         serialized = serializers.serialize(queryset=[booking], format='json')
         return Response({"booking": serialized}, status=status.HTTP_201_CREATED)
