@@ -7,7 +7,6 @@ class AccountManager(BaseUserManager):
     def create_user(self, email, password, **kwargs):
         user = self.model(email=email, password=password, **kwargs)
         user.set_password(password)
-        user.is_customer = True
         user.save()
         return user
 
