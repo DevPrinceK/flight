@@ -1,12 +1,29 @@
 from django.urls import path
+from knox import views as knox_views
 from . import views
 
 app_name = "api"
 urlpatterns = [
-    path("", views.HomeAPIView.as_view(), name="home"),
+    path("", views.OverviewAPI.as_view(), name="overview"),
     path('sign-up/', views.SignUpAPI.as_view(), name="sign_up"),
+]
+
+# TRIPS ENDPOINTS
+urlpatterns += [
+    path('search-trips/', views.SearchTripsAPI.as_view(), name="search_trips"),  # noqa
+    path('book-trip/', views.BookTripAPI.as_view(), name="book_trip"),
+    path('user-bookings/', views.UserBookings.as_view(), name="user_bookings"),  # noqa
+]
+
+# OTHER TRIP ENDPOINTS
+urlpatterns += [
     path('all-trips/', views.AllTripsAPI.as_view(), name="all_trips"),
     path('trips-today/', views.TripsTodayAPI.as_view(), name="trips_today"),
-    path('custom-trips/', views.CustomTripsAPI.as_view(), name="custom_trips"),  # noqa
-    path('book-trip/', views.BookTripAPI.as_view(), name="book_trip"),
+]
+
+# KNOX AUTHENTICATION
+urlpatterns += [
+    path('login/', views.LoginAPI.as_view(), name='login'),
+    path('logout/', knox_views.LogoutView.as_view(), name='logout'),
+    path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),  # noqa
 ]
