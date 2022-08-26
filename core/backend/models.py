@@ -61,19 +61,30 @@ class VehicleCategory(models.Model):
 
 class Trip(models.Model):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)  # noqa
-    origin = models.CharField(max_length=255, null=True, blank=True)
+    source = models.CharField(max_length=255, null=True, blank=True)
     destination = models.CharField(max_length=255, null=True, blank=True)
-    seat = models.ForeignKey(Seat, on_delete=models.CASCADE, null=True, blank=True)  # noqa
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.origin if self.origin else "trip"
+        return self.source if self.source else "trip"
 
     class Meta:
         db_table = 'trip'
+
+
+class Booking(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    seat = models.ForeignKey(Seat, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user if self.user else "booking"
+
+    class Meta:
+        db_table = 'booking'
 
 
 class Ticket(models.Model):
@@ -81,7 +92,7 @@ class Ticket(models.Model):
         time_id = str(int(time.time() * 1000))
         return time_id.join(random.choices(string.ascii_uppercase + string.digits, k=8))
     ticket_id = models.CharField(max_length=255, null=True, blank=True)
-    trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date_created = models.DateTimeField(auto_now_add=True)
 
