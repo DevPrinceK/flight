@@ -25,6 +25,7 @@ class HomeAPIView(APIView):
             'login': '/api/login/',
             'all-trips': '/api/all-trips/',
             'trips-today': '/api/trips-today/',
+            'custom-trips': '/api/custom-trips',
             'permissions': '/api/permissions/',
         }
         return Response(end_points)
@@ -51,7 +52,7 @@ class TripsTodayAPI(APIView):
         return Response(serializer.data)
 
 
-class TripsTodayWithSourceAndDestinationAPI(APIView):
+class CustomTripsAPI(APIView):
     '''endpoint for getting all trips for the day'''
     permission_classes = [permissions.AllowAny]
 
