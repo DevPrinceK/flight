@@ -79,6 +79,7 @@ class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     seat = models.ForeignKey(Seat, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    date = models.DateTimeField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
