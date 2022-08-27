@@ -25,3 +25,18 @@ urlpatterns += [
 urlpatterns += [
     path("tickets/", views.TicketListView.as_view(), name="tickets"),
 ]
+
+# SEATS
+urlpatterns += [
+    path("seats/", views.SeatListView.as_view(), name="seats"),
+]
+
+# TRIPS
+urlpatterns += [
+    path("trips/", views.TripListView.as_view(), name="trips"),
+]
+
+# CATEGORIES
+urlpatterns += [
+    path("categories/", views.CategoryListView.as_view(), name="categories"),
+]
