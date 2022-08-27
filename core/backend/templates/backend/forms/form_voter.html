@@ -1,0 +1,59 @@
+<form action="" class="needs-validation my-4" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="voter_id" value="{{voter.id}}">
+
+    <div class="form-group mt-3">
+        <label for="fullname">Fullname <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. Prince Kyeremanteng" value="{{voter.fullname}}" type="text"
+            name="fullname" id="fullname" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="index_number">Index Number <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. 10841385" value="{{voter.index_number}}" type="text"
+            name="index_number" id="index_number" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="user_class">Form / Class <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. FORM 2 A1" value="{{voter.user_class}}" type="text"
+            name="user_class" id="user_class" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="house">House <span class="text text-danger">*</span></label>
+        <select name="house" id="house" class="form-control">
+            <option value="---">---Select House---</option>
+            <option value="ASANTE" {% if voter.house == "ASANTE" %} selected {% endif %}>ASANTE</option>
+            <option value="BOTWE" {% if voter.house == "BOTWE" %} selected {% endif %}>BOTWE</option>
+            <option value="KALEDZI" {% if voter.house == "KALEDZI" %} selected {% endif %}>KALEDZI</option>
+            <option value="KUMI" {% if voter.house == "KUMI" %} selected {% endif %}>KUMI</option>
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="sex">Sex <span class="text text-danger">*</span></label>
+        <select name="sex" id="sex" class="form-control">
+            <option value="---">---Select Sex---</option>
+            <option value="F" {% if voter.sex == "F" %} selected {% endif %}>F</option>
+            <option value="M" {% if voter.sex == "M" %} selected {% endif %}>M</option>
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+    <div class="form-group my-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>

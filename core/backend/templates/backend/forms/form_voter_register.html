@@ -1,0 +1,16 @@
+<form action="{% url 'backend:upload_register' %}" class="needs-validation my-4" enctype="multipart/form-data"
+    method="POST">
+    {% csrf_token %}
+
+    <div class="form-group mt-3">
+        <label for="csv_file">Voter Register <span class="text text-danger">*</span></label>
+        <input class="form-control" type="file" name="csv_file" id="csv_file" accept=".csv" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+    <div class="form-group my-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>

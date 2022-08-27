@@ -1,0 +1,19 @@
+{% extends 'backend/base.html' %}
+{% block active_item %}candidates{% endblock %}
+{% block page_title %}Candidates{% endblock %}
+
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:index' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i> Candidates</a>
+</div>
+<div class="row col-md-11 mx-auto">
+    <section class="card col-md-9 mx-auto p-3">
+        <div class="d-flex justify-content-between">
+            <h6>CREATE/UPDATE CANDIDATE</h6>
+        </div>
+        {% include 'backend/forms/form_candidate.html' %}
+    </section>
+</div>
+{% endblock %}

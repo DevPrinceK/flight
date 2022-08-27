@@ -1,0 +1,86 @@
+{% extends 'backend/base.html' %}
+
+{% block active_item %}voters{% endblock %}
+{% block page_title %}Voters{% endblock %}
+
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:index' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i> Voters</a>
+</div>
+
+
+<div class="p-3">
+    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Voters</h4>
+    <div class="row">
+        <section class="col-md-12 mt-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="card-title"><span>All Voters</span></h5>
+                    <div class="actions">
+                        <a href="{% url 'backend:create_update_voter' %}" class="btn btn-sm btn-primary text-white"><i
+                                class="bi bi-plus"></i> Add
+                            Voter</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm data-table col-12" id="Voters" style="min-width: 60em;">
+                        <caption>List of Voters</caption>
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Index Number</th>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Voted</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if voters %}
+                            {% for voter in voters %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{voter.index_number}}</td>
+                                <td>{{voter.fullname|upper}}</td>
+                                <td>{{voter.user_class|upper}}</td>
+                                <td>{{voter.voted_for_all}}</td>
+                                <td class="text text-center d-flex">
+                                    <a href="{% url 'backend:create_update_voter' %}?index_number={{voter.index_number}}"
+                                        class="px-2">
+                                        <button class="btn btn-sm btn-primary">
+                                            <i class="bi bi-pencil"></i>
+                                            Edit
+                                        </button>
+                                    </a>
+
+                                    <form action="{% url 'backend:delete_voter' %}" method="POST"
+                                        class="requires-confirmation"
+                                        data-message="Click on okay to permanently delete this voter.">
+                                        <input type="hidden" name="index_number" value="{{voter.index_number}}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>No Voters Found</tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}

@@ -1,0 +1,996 @@
+{% extends 'backend/base.html' %}
+{% load humanize %}
+
+{% block active_item %}dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:index' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i>Dashboard</a>
+</div>
+
+<div class="p-3 row-col-12">
+    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Dashboard</h4>
+    <p>Breakdown of the current election.</p>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-12">
+                <a href="{% url 'backend:download_results_csv' %}" class="btn btn-sm btn-primary text-white"> <i
+                        class="bi bi-save"></i> Download Results</a>
+                <div class="card mb-2 mt-1">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6"><span class="p mt-1 text-left badge bg-primary"> Current Election </span>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="p mt-1 text-right badge bg-primary">{{current_election}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Votes Received (Set 1) </h5>
+
+                        <!-- Bar Chart -->
+                        <canvas id="top-rated" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#top-rated'), {
+                                    type: 'bar',
+                                    data: {
+                                        labels: [{% for i in positions %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Votes Received',
+                                            data: [{% for i in positions %} {{i.get_votes_cast}}, {% endfor %}],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.2)',
+                                                'rgba(255, 159, 64, 0.2)',
+                                                'rgba(255, 205, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                                'rgba(153, 102, 255, 0.2)',
+                                                'rgba(201, 203, 207, 0.2)',
+                                                'rgba(255, 205, 86, 0.2)',
+                                                'rgba(75, 192, 192, 0.2)',
+                                                'rgba(54, 162, 235, 0.2)',
+                                            ],
+                                            borderColor: [
+                                                'rgb(255, 99, 132)',
+                                                'rgb(255, 159, 64)',
+                                                'rgb(255, 205, 86)',
+                                                'rgb(75, 192, 192)',
+                                                'rgb(54, 162, 235)',
+                                                'rgb(153, 102, 255)',
+                                                'rgb(201, 203, 207)',
+                                                'rgb(255, 205, 86)',
+                                                'rgb(75, 192, 192)',
+                                                'rgb(54, 162, 235)',
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Bar CHart -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Votes Received (Set 2) </h5>
+
+                        <!-- Bar Chart -->
+                        <canvas id="total_votes_set_2" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#total_votes_set_2'), {
+                                    type: 'bar',
+                                    data: {
+                                        labels: [{% for i in positions_set_2 %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Votes Received',
+                                            data: [{% for i in positions_set_2 %} {{i.get_votes_cast}}, {% endfor %}],
+                                            backgroundColor: [
+                                                'rgba(255, 99, 132, 0.5)',
+                                                'rgba(255, 159, 64, 0.5)',
+                                                'rgba(255, 205, 86, 0.5)',
+                                                'rgba(75, 192, 192, 0.5)',
+                                                'rgba(54, 162, 235, 0.5)',
+                                                'rgba(153, 102, 255, 0.5)',
+                                                'rgba(201, 203, 207, 0.5)',
+                                                'rgba(255, 205, 86, 0.5)',
+                                                'rgba(75, 192, 192, 0.5)',
+                                                'rgba(54, 162, 235, 0.5)',
+                                            ],
+                                            borderColor: [
+                                                'rgb(255, 99, 132)',
+                                                'rgb(255, 159, 64)',
+                                                'rgb(255, 205, 86)',
+                                                'rgb(75, 192, 192)',
+                                                'rgb(54, 162, 235)',
+                                                'rgb(153, 102, 255)',
+                                                'rgb(201, 203, 207)',
+                                                'rgb(255, 205, 86)',
+                                                'rgb(75, 192, 192)',
+                                                'rgb(54, 162, 235)',
+                                            ],
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Bar CHart -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SENIOR BOYS PREFECT</h5>
+                        <canvas id="president" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#president'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in sps %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'SENIOR PREFECT',
+                                            data: [{% for i in sps %} {{i.vote_count}}, {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green'
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SENIOR GIRLS PREFECT</h5>
+                        <canvas id="vice_president" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#vice_president'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in gps %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'GIRLS PREFECT',
+                                            data: [{% for i in gps %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green'
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">COMPOUND OVERSEER (BOYS) </h5>
+                        <canvas id="cob" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#cob'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in cob %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Compound Overseer',
+                                            data: [{% for i in cob %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green'
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">COMPOUND OVERSEER (GIRLS)</h5>
+                        <canvas id="cog" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#cog'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in cog %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Compound Overseer',
+                                            data: [{% for i in cog %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SPORTS AND GAMES (BOYS)</h5>
+                        <canvas id="sgpb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#sgpb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in sgpb %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Sports and Games',
+                                            data: [{% for i in sgpb %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SPORTS AND GAMES (GIRLS)</h5>
+                        <canvas id="sgpg" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#sgpg'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in sgpg %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Sports and Games',
+                                            data: [{% for i in sgpg %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">DINING HALL PREFECTS (BOYS)</h5>
+                        <canvas id="dhpb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#dhpb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in dhpb %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Dining Hall Prefects',
+                                            data: [{% for i in dhpb %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">DINING HALL PREFECTS (GIRLS)</h5>
+                        <canvas id="dhpg" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#dhpg'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in dhpg %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Dining Hall Prefects',
+                                            data: [{% for i in dhpg %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">ENTERTAINMENT AND CULTURE (BOYS)</h5>
+                        <canvas id="ecpb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#ecpb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in ecpb %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Entertainment and Culture',
+                                            data: [{% for i in ecpb %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">ENTERTAINMENT AND CULTURE (GIRLS)</h5>
+                        <canvas id="ecpg" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#ecpg'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in ecpg %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Entertainment and Culture',
+                                            data: [{% for i in ecpg %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">LIBRARY PREFECT (BOYS)</h5>
+                        <canvas id="lpb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#lpb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'Library Prefect',
+                                            // NOTE
+                                            data: [{{lpb.vote_count}}, {{lpb.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">LIBRARY PREFECT (GIRLS)</h5>
+                        <canvas id="lpg" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#lpg'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'Library Prefect',
+                                            data: [{{lpb.vote_count}}, {{lpb.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">CHAPEL STEWARDS (BOYS)</h5>
+                        <canvas id="csb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#csb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'Chapel Stewards',
+                                            data: [{{csb.vote_count}}, {{csb.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">CHAPEL STEWARDS (GIRLS)</h5>
+                        <canvas id="csg" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#csg'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'Chapel Stewards',
+                                            data: [{{csg.vote_count}}, {{csg.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">PREPS PREFECTS (BOYS)</h5>
+                        <canvas id="ppb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#ppb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in ppb %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Preps Prefect',
+                                            data: [{% for i in ppb %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">PREPS PREFECTS (GIRLS)</h5>
+                        <canvas id="ppg" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#ppg'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in ppg %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Preps Prefect',
+                                            data: [{% for i in ppg %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">HEALTH AND SANITATION (BOYS)</h5>
+                        <canvas id="hspb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hspb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in hspb %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'Health and Sanitation',
+                                            data: [{% for i in hspb %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">HEALTH AND SANITATION (GIRLS)</h5>
+                        <canvas id="hspg" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hspg'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'Health and Sanitation',
+                                            data: [{{hspg.vote_count}}, {{hspg.no_votes_count}}],
+                                            backgroundColor: ['gold','red'],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">ASANTE HOUSE PREFECT (BOYS)</h5>
+                        <canvas id="hpba" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hpba'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'House Prefect',
+                                            data: [{{hpba.vote_count}}, {{hpba.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">ASANTE HOUSE PREFECT (GIRLS)</h5>
+                        <canvas id="hpga" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hpga'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'House Prefect',
+                                            data: [{{hpga.vote_count}}, {{hpga.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">BOTWE HOUSE PREFECT (BOYS)</h5>
+                        <canvas id="hpbb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hpbb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'House Prefect',
+                                            data: [{{hpbb.vote_count}}, {{hpbb.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">BOTWE HOUSE PREFECT (GIRLS)</h5>
+                        <canvas id="hpgb" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hpgb'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'House Prefect',
+                                            data: [{{hpgb.vote_count}}, {{hpgb.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">KALEDZI HOUSE PREFECT (BOYS)</h5>
+                        <canvas id="hpbka" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hpbka'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'House Prefect',
+                                            data: [{{hpbka.vote_count}}, {{hpbka.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">KALEDZI HOUSE PREFECT (GIRLS)</h5>
+                        <canvas id="hpgka" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hpgka'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: ['Yes Votes', 'No Votes'],
+                                        datasets: [{
+                                            label: 'House Prefect',
+                                            data: [{{hpgka.vote_count}}, {{hpgka.no_votes_count}}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'red',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">KUMI HOUSE PREFECT (BOYS)</h5>
+                        <canvas id="hpbku" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hpbku'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in hpbku %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'House Prefect',
+                                            data: [{% for i in hpbku %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">KUMI HOUSE PREFECT (GIRLS)</h5>
+                        <canvas id="hpgku" style="max-height: 400px;"></canvas>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", () => {
+                                new Chart(document.querySelector('#hpgku'), {
+                                    type: 'doughnut',
+                                    data: {
+                                        labels: [{% for i in hpgku %} '{{i.name}}', {% endfor %}],
+                                        datasets: [{
+                                            label: 'House Prefect',
+                                            data: [{% for i in hpgku %} '{{i.vote_count}}', {% endfor %}],
+                                            backgroundColor: [
+                                                'gold',
+                                                'blue',
+                                                'violet',
+                                                'indigo',
+                                                'green',
+                                            ],
+                                            hoverOffset: 4
+                                        }]
+                                    }
+                                });
+                            });
+                        </script>
+                        <!-- End Doughnut CHart -->
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,79 @@
+<form action="" class="needs-validation my-4" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="candidate_id" value="{{candidate.id}}">
+
+    <div class="form-group mt-3">
+        <label for="name">Name <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g., Prince Kyeremanteng S." value="{{candidate.name}}" type="text"
+            name="name" id="name" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="nickname">Nickname <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g., Earthquake." value="{{candidate.nickname}}" type="text"
+            name="nickname" id="nickname">
+    </div>
+    <div class="form-group mt-3">
+        <label for="sex">Sex <span class="text text-danger">*</span></label>
+        <select name="sex" id="sex" class="form-control">
+            <option value="---">---Select Sex---</option>
+            <option value="F" {% if candidate.sex == "F" %} selected {% endif %}>F</option>
+            <option value="M" {% if candidate.sex == "M" %} selected {% endif %}>M</option>
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="house">House <span class="text text-danger">*</span></label>
+        <select name="house" id="house" class="form-control">
+            <option value="---">---Select House---</option>
+            <option value="ASANTE" {% if candidate.house == "ASANTE" %} selected {% endif %}>ASANTE</option>
+            <option value="BOTWE" {% if candidate.house == "BOTWE" %} selected {% endif %}>BOTWE</option>
+            <option value="KALEDZI" {% if candidate.house == "KALEDZI" %} selected {% endif %}>KALEDZI</option>
+            <option value="KUMI" {% if candidate.house == "KUMI" %} selected {% endif %}>KUMI</option>
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="position">Position <span class="text text-danger">*</span></label>
+        <select name="position" id="position" class="form-control">
+            <option value="---">---Select Position---</option>
+            {% for position in positions %}
+            <option value="{{position.id}}" {% if position.id == candidate.position.id %} selected {% endif %}>
+                {{position.name}}</option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="ballot_number">Ballot Number <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g., 1" value="{{candidate.ballot_number}}" type="number"
+            name="ballot_number" id="ballot_number" min="1" step="1" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="image">IMAGE<span class="text text-danger">*</span></label>
+        <small class="text text-primary p-0 m-0">{% if candidate.picture %}Currently: <a
+                href="{{candidate.picture.url}}" target="_blank">{{candidate.picture.url}}</a>{% endif %}</small>
+        <input class="form-control" type="file" accept="image/*" name="picture" id="picture"
+            {% if not candidate.picture %}required{% endif %}>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+
+    <div class="form-group my-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
