@@ -1,0 +1,17 @@
+@media screen and (max-device-width: 480px) {
+  #side-bar {
+    width: 12em;
+  }
+  #side-bar.collapsed {
+    width: 0em;
+  }
+
+  #main-page {
+    left: 12em;
+    width: calc(100% - 12em);
+  }
+  #main-page.collapsed {
+    width: calc(100% - 0em);
+    left: 0em;
+  }
+}

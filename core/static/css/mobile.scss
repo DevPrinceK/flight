@@ -1,0 +1,22 @@
+@media screen and (max-device-width: 480px) {
+  $sidebar-width: 12em;
+  $sidebar-collapseed-width: 0em;
+
+  #side-bar {
+    width: $sidebar-width;
+
+    &.collapsed {
+      width: $sidebar-collapseed-width;
+    }
+  }
+
+  #main-page {
+    left: $sidebar-width;
+    width: calc(100% - #{$sidebar-width});
+
+    &.collapsed {
+      width: calc(100% - #{$sidebar-collapseed-width});
+      left: $sidebar-collapseed-width;
+    }
+  }
+}

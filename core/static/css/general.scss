@@ -1,0 +1,276 @@
+#main-overlay {
+  background-color: rgba($black, 0.1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: $overlay-index;
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+a {
+  color: inherit !important;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+    color: inherit !important;
+  }
+}
+
+#side-bar {
+  background-color: $primary;
+  width: $sidebar-width;
+  height: 100vh;
+  color: $on-primary;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  transition: width 0.2s ease-in-out, left 0.2s ease-in-out;
+  user-select: none;
+  overflow-x: hidden;
+
+  &.collapsed {
+    width: $sidebar-collapseed-width;
+    overflow-x: hidden !important;
+
+    .header {
+      .brand-name {
+        font-size: 0.8em;
+      }
+    }
+
+    .side-bar-item {
+      cursor: pointer;
+
+      .lable {
+        display: none;
+      }
+      .icon {
+        width: $sidebar-collapseed-width;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+
+  .header {
+    background-color: rgba($white, 0.05);
+    height: $nav-height;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Dancing Script", cursive;
+    width: inherit;
+    .brand-name {
+      font-size: 30px;
+    }
+  }
+
+  .item-header {
+    margin-left: 0.5em;
+    font-size: 0.8em;
+    font-weight: bolder;
+  }
+
+  .side-bar-item {
+    padding: 0.3em 0.3em;
+    margin-top: 0.3em;
+    width: inherit;
+    border-bottom: 0.5px solid rgba($white, 0.1);
+    position: relative;
+
+    &.active,
+    &:hover {
+      color: $secondary-deep;
+
+      &:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        height: inherit;
+        width: 30px;
+        height: 3em;
+        border-left: 0.3em solid $secondary;
+      }
+    }
+
+    .icon {
+      width: 3em;
+    }
+
+    .lable {
+      font-size: 1em;
+    }
+  }
+}
+
+.btn-white {
+  background-color: $white;
+  outline: none;
+  border: none;
+}
+
+#main-page {
+  position: absolute;
+  top: 0;
+  left: $sidebar-width;
+  width: calc(100% - #{$sidebar-width});
+  background-color: rgba($primary, 0.1);
+  transition: width 0.2s ease-in-out, left 0.2s ease-in-out;
+
+  &.collapsed {
+    width: calc(100% - #{$sidebar-collapseed-width});
+    left: $sidebar-collapseed-width;
+  }
+
+  #main-nav {
+    height: $nav-height;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    background-color: $white;
+    transition: box-shadow 0.2s ease-in-out;
+    z-index: calc(#{$overlay-index});
+
+    &.raised {
+      box-shadow: 0 0 0.5em rgba($black, 0.3);
+    }
+
+    div[class^="nav-"] {
+      display: flex;
+      align-items: center;
+    }
+    .nav-right {
+      margin-right: 1em;
+    }
+
+    .dropdown {
+      display: flex;
+      align-items: center;
+
+      .content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        min-width: 13em;
+        background-color: $white;
+        border-radius: 0.5em;
+        z-index: calc(#{$overlay-index} + 2);
+        box-shadow: 0 0 0.5em rgba($black, 0.3);
+        transition: opacity 0.2s ease-in-out;
+        opacity: 1;
+        overflow: hidden;
+        &.active {
+          opacity: 1;
+          display: block;
+          z-index: 50;
+        }
+
+        .drop-item {
+          padding: 0.5em;
+          display: block;
+          border-top: 1px solid rgba($black, 0.1);
+          cursor: pointer;
+
+          &:hover {
+            background-color: rgba($primary, 0.1);
+          }
+        }
+      }
+    }
+  }
+
+  .main-content {
+    min-height: calc(100vh - #{$nav-height});
+  }
+}
+
+.rounded-profile-picture {
+  border-radius: 100%;
+  overflow: hidden;
+  width: 3em;
+  height: 3em;
+  display: inline-block;
+
+  img {
+    width: 3em;
+    height: 3em;
+  }
+}
+
+.footer {
+  background-color: rgba($primary, 0.1) !important;
+  padding: 1em;
+  text-align: center;
+  color: $black !important;
+}
+
+.breadcrumb {
+  padding: 0.5em !important;
+  margin-bottom: 0.5em;
+  background-color: rgba($primary, 0.1);
+  border-radius: 0.5em;
+  color: $primary;
+
+  .active {
+    color: rgba($primary, 0.5) !important;
+  }
+}
+
+.page-header {
+  color: rgba($primary, 0.8);
+}
+
+.card {
+  .card-body {
+    overflow: auto;
+    width: 100%;
+  }
+}
+
+img.croppable {
+  max-width: 100%;
+  display: block;
+}
+
+.crop-form {
+  position: relative;
+}
+.btn-crop-image {
+  position: absolute;
+  top: -1em;
+  right: -1em;
+  background-color: rgba($success, 0.5);
+  border-radius: 0.5em;
+  color: white;
+  padding: 0.5em;
+  cursor: pointer;
+}
+
+.btn-crop-image-delete {
+  position: absolute;
+  top: -1em;
+  left: -1em;
+  background-color: rgba($danger, 0.1);
+  border-radius: 0.5em;
+  padding: 0.5em;
+  color: white;
+  z-index: calc(#{$overlay-index} - 1) !important;
+  cursor: pointer;
+}
+
+form {
+  position: relative;
+}
