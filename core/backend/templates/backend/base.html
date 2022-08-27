@@ -59,7 +59,7 @@
             </a>
         </div>
         <div class="side-bar-item" title="seats" id="seats">
-            <a href="" class="d-flex">
+            <a href="{% url 'backend:seats' %}" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-check-square" style="font-size: 1.5em;"></i>
                 </div>
@@ -69,7 +69,7 @@
             </a>
         </div>
         <div class="side-bar-item" title="category" id="category">
-            <a href="" class="d-flex">
+            <a href="{% url 'backend:categories' %}" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-check-square" style="font-size: 1.5em;"></i>
                 </div>
@@ -79,7 +79,7 @@
             </a>
         </div>
         <div class="side-bar-item" title="trips" id="trips">
-            <a href="" class="d-flex">
+            <a href="{% url 'backend:trips' %}" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-check-square" style="font-size: 1.5em;"></i>
                 </div>
@@ -88,7 +88,6 @@
                 </div>
             </a>
         </div>
-
 
         <h6 class="item-header mt-3">OBJECTS</h6>
         <div class="side-bar-item" title="Bookings" id="bookings">
