@@ -24,8 +24,9 @@ class Agency(models.Model):
 
 class Vehicle(models.Model):
     name = models.CharField(max_length=255)
+    vin = models.CharField(max_length=255, null=True, blank=True)
     category = models.ForeignKey('VehicleCategory', on_delete=models.CASCADE, null=True, blank=True)  # noqa
-    agency = models.ForeignKey('Agency', on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    agency = models.ForeignKey(Agency, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

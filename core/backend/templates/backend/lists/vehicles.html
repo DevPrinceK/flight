@@ -1,53 +1,54 @@
 {% extends 'backend/base.html' %}
 
-{% block active_item %}elections{% endblock %}
-{% block page_title %}Elections{% endblock %}
+{% block active_item %}vehicles{% endblock %}
+{% block page_title %}Vehicles{% endblock %}
 
 
 {% block content %}
 <div class="breadcrumb">
     <a href="{% url 'backend:index' %}">Dashboard</a>
-    <a class="active"><i class="bi bi-chevron-right"></i> Elections</a>
+    <a class="active"><i class="bi bi-chevron-right"></i> Vehicles</a>
 </div>
 
 
 <div class="p-3">
-    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Elections</h4>
+    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Vehicles</h4>
     <div class="row">
         <section class="col-md-12 mt-3">
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <h5 class="card-title"><span>All Elections</span></h5>
+                    <h5 class="card-title"><span>All Vehicles</span></h5>
                     <div class="actions">
-                        <a href="{% url 'backend:create_update_election' %}"
-                            class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Add
-                            Election</a>
+                        <a href="" class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Add
+                            Vehicle</a>
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-sm data-table col-12" id="Elections" style="min-width: 60em;">
-                        <caption>List of Elections</caption>
+                    <table class="table table-sm data-table col-12" id="Vehicles" style="min-width: 60em;">
+                        <caption>List of Vehicles</caption>
                         <thead>
                             <tr>
-                                <th>Election No.</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Date of Election</th>
-                                <td>Active</td>
+                                <th>#.</th>
+                                <th>VIN</th>
+                                <th>VEHICLE NAME</th>
+                                <th>CATEGORY</th>
+                                <th>AGENCY</th>
+                                <td>DATE ADDED</td>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% if elections %}
-                            {% for election in elections %}
+                            {% if vehicles %}
+                            {% for vehicle in vehicles %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td>{{election.name|upper}}</td>
-                                <td>{{election.description}}</td>
-                                <td>{{election.date_of_election}}</td>
-                                <td>{{election.is_active}}</td>
+                                <td>{{vehicle.vin|upper}}</td>
+                                <td>{{vehicle.name}}</td>
+                                <td>{{vehicle.category.name}}</td>
+                                <td>{{vehicle.agency.name}}</td>
+                                <td>{{vehicle.date_created}}</td>
                                 <td class="text text-center d-flex">
-                                    <a href="{% url 'backend:create_update_election' %}?election_id={{election.id}}"
+                                    <a href="{% url 'backend:create_update_vehicle' %}?vehicle_id={{vehicle.id}}"
                                         class="px-2">
                                         <button class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil"></i>
@@ -55,10 +56,10 @@
                                         </button>
                                     </a>
 
-                                    <form action="{% url 'backend:delete_election' %}" method="POST"
+                                    <form action="{% url 'backend:delete_vehicle' %}" method="POST"
                                         class="requires-confirmation"
-                                        data-message="Click on okay to permanently delete this election.">
-                                        <input type="hidden" name="election_id" value="{{election.id}}">
+                                        data-message="Click on okay to permanently delete this vehicle.">
+                                        <input type="hidden" name="vehicle_id" value="{{vehicle.id}}">
                                         {% csrf_token %}
                                         <button class="btn btn-sm btn-danger">
                                             <i class="bi bi-trash"></i>
@@ -69,7 +70,7 @@
                             </tr>
                             {% endfor %}
                             {% else %}
-                            <tr>No Elections Found</tr>
+                            <tr>No Vehicles Found</tr>
                             {% endif %}
                         </tbody>
                     </table>
