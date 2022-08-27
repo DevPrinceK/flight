@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="breadcrumb">
-    <a href="{% url 'backend:index' %}">Dashboard</a>
+    <a href="{% url 'backend:backend' %}">Dashboard</a>
     <a class="active"><i class="bi bi-chevron-right"></i> Vehicles</a>
 </div>
 
@@ -48,16 +48,14 @@
                                 <td>{{vehicle.agency.name}}</td>
                                 <td>{{vehicle.date_created}}</td>
                                 <td class="text text-center d-flex">
-                                    <a href="{% url 'backend:create_update_vehicle' %}?vehicle_id={{vehicle.id}}"
-                                        class="px-2">
+                                    <a href="" class="px-2">
                                         <button class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil"></i>
                                             Edit
                                         </button>
                                     </a>
 
-                                    <form action="{% url 'backend:delete_vehicle' %}" method="POST"
-                                        class="requires-confirmation"
+                                    <form action="" method="POST" class="requires-confirmation"
                                         data-message="Click on okay to permanently delete this vehicle.">
                                         <input type="hidden" name="vehicle_id" value="{{vehicle.id}}">
                                         {% csrf_token %}

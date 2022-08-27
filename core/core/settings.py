@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     'rest_framework',
     'knox',
@@ -107,7 +108,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+STATIC_ROOT = BASE_DIR / 'staticfiles/'
+MEDIA_ROOT = BASE_DIR / 'assets/'
+MEDIA_URL = '/assets/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "dist",
+    BASE_DIR / "static",
+]
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

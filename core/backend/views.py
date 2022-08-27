@@ -1,5 +1,7 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
 from django.views import View
+
+from backend.models import Vehicle
 
 
 class DashboardView(View):
@@ -7,5 +9,13 @@ class DashboardView(View):
 
     def get(self, request, *args, **kwargs):
         context = {}
-        # return render(request, self.template, context)
+        return render(request, self.template, context)
+
+
+class VehicleListView(View):
+    template = "backend/lists/vehicles.html"
+
+    def get(self, request, *args, **kwargs):
+        vehicles = Vehicle.objects.all().order_by('-id')
+        context = {'vehicles': vehicles}
         return render(request, self.template, context)
