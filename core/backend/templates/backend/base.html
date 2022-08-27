@@ -23,7 +23,7 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 
-    <title>{% block page_title %}{% endblock %} | Tashtech Evoting Portal</title>
+    <title>{% block page_title %}{% endblock %} | Flight Booking Backend</title>
 
 </head>
 
@@ -33,11 +33,12 @@
     <aside id="side-bar" data-active="{% block active_item %}dashboard{% endblock %}">
         <div class="header bg-white">
             <img src="{% static 'images/logo.png' %}" style="height: 50px; width:auto;" alt="">
+            <!-- <h2>FlightApp</h2> -->
         </div>
 
-        <h6 class="item-header mt-3">Elections</h6>
+        <h6 class="item-header mt-3">STATISTICS</h6>
         <div class="side-bar-item" title="Dashboard" id="dashboard">
-            <a href="{% url 'backend:index' %}" class="d-flex">
+            <a href="{% url 'backend:backend' %}" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-bar-chart" style="font-size: 1.5em;"></i>
                 </div>
@@ -46,76 +47,86 @@
                 </div>
             </a>
         </div>
+        <h6 class="item-header mt-3">CONFIGURATIONS</h6>
 
-        <div class="side-bar-item" title="elections" id="elections">
-            <a href="{% url 'backend:elections' %}" class="d-flex">
+        <div class="side-bar-item" title="vehicles" id="vehicles">
+            <a href="" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-bag" style="font-size: 1.5em;"></i>
                 </div>
                 <div class="lable">
-                    <span>Elections</span>
+                    <span>Vehicles</span>
                 </div>
             </a>
         </div>
-        <div class="side-bar-item" title="verification" id="verification">
-            <a href="{% url 'backend:verification' %}" class="d-flex">
+        <div class="side-bar-item" title="seats" id="seats">
+            <a href="" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-check-square" style="font-size: 1.5em;"></i>
                 </div>
                 <div class="lable">
-                    <span>Verification</span>
+                    <span>Seats</span>
+                </div>
+            </a>
+        </div>
+        <div class="side-bar-item" title="category" id="category">
+            <a href="" class="d-flex">
+                <div class="icon">
+                    <i class="bi bi-check-square" style="font-size: 1.5em;"></i>
+                </div>
+                <div class="lable">
+                    <span>Category</span>
+                </div>
+            </a>
+        </div>
+        <div class="side-bar-item" title="trips" id="trips">
+            <a href="" class="d-flex">
+                <div class="icon">
+                    <i class="bi bi-check-square" style="font-size: 1.5em;"></i>
+                </div>
+                <div class="lable">
+                    <span>Trips</span>
                 </div>
             </a>
         </div>
 
 
         <h6 class="item-header mt-3">OBJECTS</h6>
-        <div class="side-bar-item" title="Category" id="categories">
-            <a href="{% url 'backend:candidates' %}" class="d-flex">
+        <div class="side-bar-item" title="Bookings" id="bookings">
+            <a href="" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-collection" style="font-size: 1.5em;"></i>
                 </div>
                 <div class="lable">
-                    <span>Candidates</span>
+                    <span>Bookings</span>
                 </div>
             </a>
         </div>
 
-        <div class="side-bar-item" title="Banners" id="banners">
-            <a href="{% url 'backend:voters' %}" class="d-flex">
+        <div class="side-bar-item" title="Tickers" id="banners">
+            <a href="" class="d-flex">
                 <div class="icon">
                     <i class="bx bx-chalkboard" style="font-size: 1.5em;"></i>
                 </div>
                 <div class="lable">
-                    <span>Voters</span>
+                    <span>Tickets</span>
                 </div>
             </a>
         </div>
 
-        <div class="side-bar-item" title="Locations" id="locations">
-            <a href="{% url 'backend:positions' %}" class="d-flex">
+        <div class="side-bar-item" title="Transactions" id="transactions">
+            <a href="" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-people" style="font-size: 1.5em;"></i>
                 </div>
                 <div class="lable">
-                    <span>Positions</span>
+                    <span>Transactions</span>
                 </div>
             </a>
         </div>
 
-        <!-- <div class="side-bar-item" title="Setup" id="setup">
-            <a href="" class="d-flex">
-                <div class="icon">
-                    <i class="bi bi-sliders" style="font-size: 1.5em;"></i>
-                </div>
-                <div class="lable">
-                    <span>Setup <span class="badge" style="background-color: gold;">Soon</span> </span>
-                </div>
-            </a>
-        </div> -->
-
         <div class="side-bar-item" title="Logout" id="logout">
-            <a href="{% url 'accounts:logout' %}" class="d-flex">
+            <a href="" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-lock" style="font-size: 1.5em;"></i>
                 </div>
@@ -141,17 +152,17 @@
                         <div class="rounded-profile-picture">
                             <img src="{% static 'images/favicon.png' %}" alt="User profile picture">
                         </div>
-                        <h6 class="text m-1">{{request.user.username|upper}}</h6>
+                        <h6 class="text m-1">{{request.user.email|upper}}</h6>
                         <button class="btn-white dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" data-target=".content" aria-haspopup="true"
                             aria-expanded="false"></button>
                         <div class="content overlay-toggle">
                             <div class="my-3">
-                                <p class="p-0 m-0 text text-center">{{request.user.username|upper}}</p>
-                                <p class="p-0 m-0 text text-center text-muted">TechStuff</p>
+                                <p class="p-0 m-0 text text-center">{{request.user.email|upper}}</p>
+                                <p class="p-0 m-0 text text-center text-muted">Tavel Agency</p>
                             </div>
                             <a class="drop-item"><i class="bi bi-person"></i> Profile</a>
-                            <a href="{% url 'accounts:logout' %}" class="drop-item"><i class="bi bi-lock"></i>
+                            <a href="" class="drop-item"><i class="bi bi-lock"></i>
                                 Logout</a>
                         </div>
                     </div>
