@@ -1,0 +1,70 @@
+{% extends 'backend/base.html' %}
+
+{% block active_item %}transactions{% endblock %}
+{% block page_title %}Transactions{% endblock %}
+
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:backend' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i> Transactions</a>
+</div>
+
+
+<div class="p-3">
+    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Transactions</h4>
+    <div class="row">
+        <section class="col-md-12 mt-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="card-title"><span>All Transactions</span></h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm data-table col-12" id="transactions" style="min-width: 60em;">
+                        <caption>List of Transactions</caption>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Trans ID</th>
+                                <th>Ext ID</th>
+                                <th>Phone</th>
+                                <th>Network</th>
+                                <th>Amount</th>
+                                <th>Status Code</th>
+                                <th>Message</th>
+                                <th>Date Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if transactions %}
+                            {% for transaction in transactions %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{transaction.transaction_id}}</td>
+                                <td>{{transaction.external_id}}</td>
+                                <td>{{transaction.source_phone}}</td>
+                                <td>{{transaction.network}}</td>
+                                <td>{{transaction.amount}}</td>
+                                <td>{{transaction.status_code}}</td>
+                                <td>{{transaction.status_message}}</td>
+                                <td>{{transaction.created_at}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center">No Transactions Found</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}
