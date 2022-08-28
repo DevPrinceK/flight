@@ -12,7 +12,6 @@ class Agency(models.Model):
     phone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(max_length=255, null=True, blank=True)
     website = models.CharField(max_length=255, null=True, blank=True)
-    logo = models.ImageField(upload_to='agency/logo/', null=True, blank=True)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
