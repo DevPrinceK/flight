@@ -19,7 +19,8 @@
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title"><span>All Vehicles</span></h5>
                     <div class="actions">
-                        <a href="" class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Add
+                        <a href="{% url 'backend:create_update_vehicle' %}" class="btn btn-sm btn-primary text-white"><i
+                                class="bi bi-plus"></i> Add
                             Vehicle</a>
                     </div>
                 </div>
@@ -48,14 +49,16 @@
                                 <td>{{vehicle.agency.name}}</td>
                                 <td>{{vehicle.date_created}}</td>
                                 <td class="text text-center d-flex">
-                                    <a href="" class="px-2">
+                                    <a href="{% url 'backend:create_update_vehicle' %}?vehicle_id={{vehicle.id}}"
+                                        class="px-2">
                                         <button class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil"></i>
                                             Edit
                                         </button>
                                     </a>
 
-                                    <form action="" method="POST" class="requires-confirmation"
+                                    <form action="{% url 'backend:delete_vehicle' %}" method="POST"
+                                        class="requires-confirmation"
                                         data-message="Click on okay to permanently delete this vehicle.">
                                         <input type="hidden" name="vehicle_id" value="{{vehicle.id}}">
                                         {% csrf_token %}
@@ -77,11 +80,6 @@
                 </div>
             </div>
         </section>
-
     </div>
 </div>
-
-
-
-
 {% endblock %}
