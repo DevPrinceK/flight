@@ -9,6 +9,8 @@ urlpatterns = [
 # VEHICLES
 urlpatterns += [
     path("vehicles/", views.VehicleListView.as_view(), name="vehicles"),
+    path("create-update-vehicle/", views.CreateUpdateVehicle.as_view(), name="create_update_vehicle"),  # noqa
+    path("delete-vehicle/", views.DeleteVehicle.as_view(), name="delete_vehicle"),  # noqa
 ]
 
 # TRANSACTIONS
@@ -39,4 +41,13 @@ urlpatterns += [
 # CATEGORIES
 urlpatterns += [
     path("categories/", views.CategoryListView.as_view(), name="categories"),
+    path("create-update-category/", views.CreateUpdateCategory.as_view(), name="create_update_category"),  # noqa
+    path("delete-category/", views.DeleteCategory.as_view(), name="delete_category"),  # noqa
+]
+
+# AGENCIES
+urlpatterns += [
+    path("agencies/", views.AgencyListView.as_view(), name="agencies"),
+    path("create-update-agency/", views.CreateUpdateAgency.as_view(), name="create_update_agency"),  # noqa
+    path("delete-agency/", views.DeleteAgency.as_view(), name="delete_agency"),  # noqa
 ]
