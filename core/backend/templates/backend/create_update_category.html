@@ -1,0 +1,19 @@
+{% extends 'backend/base.html' %}
+{% block active_item %}categories{% endblock %}
+{% block page_title %}Categories{% endblock %}
+
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:backend' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i> Categories</a>
+</div>
+<div class="row col-md-11 mx-auto">
+    <section class="card col-md-9 mx-auto p-3">
+        <div class="d-flex justify-content-between">
+            <h6>CREATE/UPDATE VEHICLE CATEGORY</h6>
+        </div>
+        {% include 'backend/forms/form_category.html' %}
+    </section>
+</div>
+{% endblock %}
