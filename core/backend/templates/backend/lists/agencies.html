@@ -1,0 +1,92 @@
+{% extends 'backend/base.html' %}
+
+{% block active_item %}agencies{% endblock %}
+{% block page_title %}Agencies{% endblock %}
+
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:backend' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i> Agencies</a>
+</div>
+
+
+<div class="p-3">
+    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Agencies</h4>
+    <div class="row">
+        <section class="col-md-12 mt-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="card-title"><span>All Agencies</span></h5>
+                    <div class="actions">
+                        <a href="{% url 'backend:create_update_agency' %}" class="btn btn-sm btn-primary text-white"><i
+                                class="bi bi-plus"></i> Add
+                            Agency</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm data-table col-12" id="Agencies" style="min-width: 60em;">
+                        <caption>List of Agencies</caption>
+                        <thead>
+                            <tr>
+                                <th>#.</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Website</th>
+                                <th>Date Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if agencies %}
+                            {% for agency in agencies %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{agency.name}}</td>
+                                <td>{{agency.phone}}</td>
+                                <td>{{agency.email}}</td>
+                                <td>{{agency.address}}</td>
+                                <td>{{agency.website}}</td>
+                                <td>{{agency.date_joined}}</td>
+                                <td class="text text-center d-flex">
+                                    <a href="{% url 'backend:create_update_agency' %}?agency_id={{agency.id}}"
+                                        class="px-2">
+                                        <button class="btn btn-sm btn-primary">
+                                            <i class="bi bi-pencil"></i>
+                                            Edit
+                                        </button>
+                                    </a>
+
+                                    <form action="{% url 'backend:delete_agency' %}" method="POST"
+                                        class="requires-confirmation"
+                                        data-message="Click on okay to permanently delete this agency.">
+                                        <input type="hidden" name="agency_id" value="{{agency.id}}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="8" class="text-center">No Agencies Found</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}
