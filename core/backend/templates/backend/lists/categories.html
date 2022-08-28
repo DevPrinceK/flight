@@ -18,7 +18,8 @@
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title"><span>All Categories</span></h5>
                     <div class="actions">
-                        <a href="" class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Add
+                        <a href="{% url 'backend:create_update_category' %}"
+                            class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Add
                             Category</a>
                     </div>
                 </div>
@@ -41,16 +42,18 @@
                                 <td>{{category.name}}</td>
                                 <td>{{category.date_created}}</td>
                                 <td class="text text-center d-flex">
-                                    <a href="" class="px-2">
+                                    <a href="{% url 'backend:create_update_category' %}?category_id={{category.id}}"
+                                        class="px-2">
                                         <button class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil"></i>
                                             Edit
                                         </button>
                                     </a>
 
-                                    <form action="" method="POST" class="requires-confirmation"
+                                    <form action="{% url 'backend:delete_category' %}" method="POST"
+                                        class="requires-confirmation"
                                         data-message="Click on okay to permanently delete this candidate.">
-                                        <input type="hidden" name="Category_id" value="{{Category.id}}">
+                                        <input type="hidden" name="category_id" value="{{category.id}}">
                                         {% csrf_token %}
                                         <button class="btn btn-sm btn-danger">
                                             <i class="bi bi-trash"></i>
