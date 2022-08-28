@@ -1,2 +1,73 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
+from django.contrib import messages
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.http import HttpResponseRedirect
+from django.utils.html import strip_tags
+
+from backend.models import Agency
+from backend.forms import AgencyForm
+
+
+class AgencyListView(View):
+    template = "backend/lists/agencies.html"
+
+    def get(self, request, *args, **kwargs):
+        agencies = Agency.objects.all().order_by('-id')
+        context = {'agencies': agencies}
+        return render(request, self.template, context)
+
+
+class CreateUpdateAgency(View):
+    template = "backend/create_update_agency.html"
+
+    def get(self, request, *args, **kwargs):
+        agency_id = request.GET.get('agency_id')
+        agency = Agency.objects.filter(id=agency_id).first()
+        context = {"agency": agency}
+        return render(request, self.template, context)
+
+    def post(self, request, *args, **kwargs):
+        agency_id = request.POST.get('agency_id')
+
+        if agency_id:
+            # agency exists
+            agency = Agency.objects.filter(id=agency_id).first()
+            form = AgencyForm(request.POST, request.FILES, instance=agency)  # noqa
+            if form.is_valid():
+                agency = form.save(commit=False)
+                agency.save()
+                messages.success(request, 'Agency Details Updated Successfully.')  # noqa
+                return redirect('backend:agencies')
+            else:
+                for field, error in form.errors.items():
+                    message = f"{field.title()}: {strip_tags(error)}"
+                    break
+                messages.warning(request, message)
+                return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+        else:
+            # it's a new agency
+            form = AgencyForm(request.POST, request.FILES)
+            if form.is_valid():
+                agency = form.save(commit=False)
+                agency.save()
+                messages.success(request, 'New Agency Created Successfully.')  # noqa
+                return redirect('backend:agencies')
+            else:
+                for field, error in form.errors.items():
+                    message = f"{field.title()}: {strip_tags(error)}"
+                    break
+                messages.warning(request, message)
+                return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+class DeleteAgency(View):
+    def get(self, request, *args, **kwargs):
+        return redirect('backend:agencies')
+
+    def post(self, request, *args, **kwargs):
+        agency_id = request.POST.get('agency_id')
+        agency = Agency.objects.filter(id=agency_id).first()
+        agency.delete()
+        messages.success(request, 'Agency Deleted Successfully.')
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
