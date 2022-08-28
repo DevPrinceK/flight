@@ -1,0 +1,50 @@
+<form action="" class="needs-validation my-4" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="vehicle_id" value="{{vehicle.id}}">
+
+    <div class="form-group mt-3">
+        <label for="fullname">Vehicle Name <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. Kantanka Omama" value="{{vehicle.name}}" type="text" name="name"
+            id="name" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="index_number">Vehicle Identification Number<span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. GT-1234-22" value="{{vehicle.vin}}" type="text" name="vin"
+            id="vin" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="category">Vehicle Category <span class="text text-danger">*</span></label>
+        <select name="category" id="category" class="form-control">
+            <option value="">Select Category</option>
+            {% for category in categories %}
+            <option value="{{category.id}}">{{category.name}}</option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="agency">Agency <span class="text text-danger">*</span></label>
+        <select name="agency" id="agency" class="form-control">
+            <option value="">Select Agency</option>
+            {% for agency in agencies %}
+            <option value="{{agency.id}}">{{agency.name}}</option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group my-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
