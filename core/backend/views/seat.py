@@ -4,15 +4,18 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.utils.html import strip_tags
+from django.utils.decorators import method_decorator
 
 from backend.forms import Seat
 from backend.models import Agency, Vehicle
 from backend.forms import SeatForm
+from core.utils.decorators import MustLogin
 
 
 class SeatListView(View):
     template = "backend/lists/seats.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         seats = Seat.objects.all().order_by('-id')
         context = {'seats': seats}
@@ -22,6 +25,7 @@ class SeatListView(View):
 class CreateUpdateSeat(View):
     template = "backend/create_update_seat.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         seat_id = request.GET.get('seat_id')
         vehicle_id = request.GET.get('vehicle_id')
@@ -37,6 +41,7 @@ class CreateUpdateSeat(View):
         }  # noqa
         return render(request, self.template, context)
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         seat_id = request.POST.get('seat_id')
         vehicle_id = request.POST.get('vehicle_id')
@@ -76,9 +81,11 @@ class CreateUpdateSeat(View):
 
 
 class DeleteSeat(View):
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:seats')
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         seat_id = request.POST.get('seat_id')
         seat = Seat.objects.filter(id=seat_id).first()
