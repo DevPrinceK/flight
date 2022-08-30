@@ -8,6 +8,7 @@ import datetime
 
 from backend.forms import AgencyForm
 from accounts.manager import AccountManager
+from .models import User
 
 
 class RegisterAgencyView(View):
@@ -26,7 +27,7 @@ class RegisterAgencyView(View):
             agency = form.save()
             if agency:
                 # agency is created so go ahead and create an admin use for agency
-                user = AccountManager().create_agency_admin(
+                user = User.objects.create_agency_admin(
                     email=user_email,
                     password=user_password,
                 )
@@ -43,7 +44,9 @@ class RegisterAgencyView(View):
                     )
                     if user:
                         login(request, user)
-                        return redirect("backend:dashboard")
+                        messages.success(
+                            request, f"Hello {user.first_name}, Welcome to EasyGo!")
+                        return redirect("backend:backend")
                     else:
                         return HTTPResponse("Something went wrong! Contact admins.")
                     return redirect("accounts:login")
@@ -66,8 +69,8 @@ class LoginView(View):
         if user is not None:
             login(request, user)
             user.last_login = datetime.datetime.now()
-            messages.success(request, 'Hi there, {}'.format(user.name))
-            return redirect('backend:dashboard')
+            messages.success(request, 'Hi there, {}'.format(user.first_name))
+            return redirect('backend:backend')
         else:
             messages.error(request, 'Invalid credentials')
             return redirect('accounts:login')
