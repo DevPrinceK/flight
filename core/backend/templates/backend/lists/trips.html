@@ -18,7 +18,8 @@
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title"><span>All Trips</span></h5>
                     <div class="actions">
-                        <a href="" class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Add
+                        <a href="{% url 'backend:create_update_trip' %}" class="btn btn-sm btn-primary text-white"><i
+                                class="bi bi-plus"></i> Add
                             Trip</a>
                     </div>
                 </div>
@@ -51,16 +52,17 @@
                                 <td>{{trip.time}}</td>
                                 <td>{{trip.date_created}}</td>
                                 <td class="text text-center d-flex">
-                                    <a href="" class="px-2">
+                                    <a href="{% url 'backend:create_update_trip' %}?trip_id={{trip.id}}" class="px-2">
                                         <button class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil"></i>
                                             Edit
                                         </button>
                                     </a>
 
-                                    <form action="" method="POST" class="requires-confirmation"
-                                        data-message="Click on okay to permanently delete this candidate.">
-                                        <input type="hidden" name="seat_id" value="{{seat.id}}">
+                                    <form action="{% url 'backend:delete_trip' %}" method="POST"
+                                        class="requires-confirmation"
+                                        data-message="Click on okay to permanently delete this trip.">
+                                        <input type="hidden" name="trip_id" value="{{trip.id}}">
                                         {% csrf_token %}
                                         <button class="btn btn-sm btn-danger">
                                             <i class="bi bi-trash"></i>
