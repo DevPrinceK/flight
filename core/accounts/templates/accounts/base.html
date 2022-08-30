@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="" />
+
+    <!-- Title -->
+    <title> EasyGO | {% block pagetitle %} {% endblock %}</title>
+
+    <!-- django static files -->
+    {% load static %}
+
+    <!--- Favicon --->
+    <link rel="icon" href="{% static 'images/logos/logo_icon.jpg' %}" type="image/x-icon" />
+
+
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+
+<body class="error-page1 main-body">
+
+    <!-- Page -->
+    <div class="page">
+
+        <div class="container-fluid">
+            <div class="row no-gutter py-5">
+                <!-- The content half -->
+                <div class="col-md-6 col-lg-6 col-xl-5 bg-white mx-auto">
+                    <div class="login d-flex align-items-center">
+                        <!-- Demo content-->
+                        <div class="container p-0 py-5">
+                            <div class="row">
+                                <div class="col-md-12 col-lg-12 col-xl-10 mx-auto">
+                                    <div class="card shadow container-fluid">
+                                        <div class="mb-3 d-flex mt-2 mx-auto">
+                                            <a href=""><img src=" {% static 'images/logos/logo_bg_white.jpg' %}"
+                                                    class="sign-favicon-a ht-30" alt="logo"
+                                                    style="height: 100px; width: auto; border-radius: 50%;">
+                                            </a>
+                                        </div>
+
+                                        <!-- NOTE: BLOCK CONTENT GOES HERE -->
+                                        {% block content %}
+
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End -->
+                    </div>
+                </div><!-- End -->
+            </div>
+        </div>
+
+    </div>
+    <!-- End Page -->
+
+    <!--- Custom js --->
+    <script src="{% static 'assets/js/custom.js' %}"></script>
+
+</body>
+
+</html>
