@@ -42,7 +42,7 @@
             </div>
             <div class="form-group mb-3">
                 <label for="email">Agency Website</label>
-                <input class="form-control" id="email" name="text" placeholder="Enter agency website" type="email"
+                <input class="form-control" id="email" name="text" placeholder="Enter agency website" type="text"
                     required>
             </div>
             <br>
@@ -76,7 +76,7 @@
             </div>
             <div class="form-group mb-3">
                 <label for="confirm-password">Confirm Password</label>
-                <input class="form-control" id="confirm-password" name="confirm_password" placeholder="Confirm Password"
+                <input class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password"
                     type="password">
             </div>
             <button class="btn btn-sm btn-primary btn-block" onclick="matchPassword()" type="submit">Sign Up</button>
@@ -94,9 +94,9 @@
     // confirm password and password confirmation
     const matchPassword = () => {
         const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirm-password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
         if (password !== confirmPassword) {
-            document.getElementById('confirm-password').setCustomValidity('Passwords do not match.');
+            document.getElementById('confirm_password').setCustomValidity('Passwords do not match.');
         }
     }
 </script>
