@@ -2,16 +2,19 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect
 from django.utils.html import strip_tags
 
 from backend.models import VehicleCategory
 from backend.forms import VehicleCategoryForm
+from core.utils.decorators import MustLogin
 
 
 class CategoryListView(View):
     template = "backend/lists/categories.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         categories = VehicleCategory.objects.all().order_by('-id')
         context = {'categories': categories}
@@ -21,12 +24,14 @@ class CategoryListView(View):
 class CreateUpdateCategory(View):
     template = "backend/create_update_category.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         category_id = request.GET.get('category_id')
         category = VehicleCategory.objects.filter(id=category_id).first()
         context = {"category": category}  # noqa
         return render(request, self.template, context)
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         category_id = request.POST.get('category_id')
 
@@ -62,9 +67,11 @@ class CreateUpdateCategory(View):
 
 
 class DeleteCategory(View):
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:categories')
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         category_id = request.POST.get('category_id')
         category = VehicleCategory.objects.filter(id=category_id).first()
