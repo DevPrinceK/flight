@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.utils.html import strip_tags
+from django.utils.decorators import method_decorator
+from core.utils.decorators import MustLogin
 
 from backend.models import Agency, Vehicle
 from backend.models import VehicleCategory
@@ -13,6 +15,7 @@ from backend.forms import VehicleForm
 class VehicleListView(View):
     template = "backend/lists/vehicles.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         vehicles = Vehicle.objects.all().order_by('-id')
         context = {'vehicles': vehicles}
@@ -22,6 +25,7 @@ class VehicleListView(View):
 class CreateUpdateVehicle(View):
     template = "backend/create_update_vehicle.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         vehicle_id = request.GET.get('vehicle_id')
         vehicle = Vehicle.objects.filter(id=vehicle_id).first()
@@ -30,6 +34,7 @@ class CreateUpdateVehicle(View):
         context = {"vehicle": vehicle, "categories": categories, "agencies": agencies}  # noqa
         return render(request, self.template, context)
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         vehicle_id = request.POST.get('vehicle_id')
         agency_id = request.POST.get('agency')
@@ -73,9 +78,11 @@ class CreateUpdateVehicle(View):
 
 
 class DeleteVehicle(View):
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:vehicles')
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         vehicle_id = request.POST.get('vehicle_id')
         vehicle = Vehicle.objects.filter(id=vehicle_id).first()
