@@ -4,14 +4,18 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.utils.html import strip_tags
+from django.utils.decorators import method_decorator
+
 
 from backend.models import Agency
 from backend.forms import AgencyForm
+from core.utils.decorators import MustLogin
 
 
 class AgencyListView(View):
     template = "backend/lists/agencies.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         agencies = Agency.objects.all().order_by('-id')
         context = {'agencies': agencies}
@@ -21,12 +25,14 @@ class AgencyListView(View):
 class CreateUpdateAgency(View):
     template = "backend/create_update_agency.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         agency_id = request.GET.get('agency_id')
         agency = Agency.objects.filter(id=agency_id).first()
         context = {"agency": agency}
         return render(request, self.template, context)
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         agency_id = request.POST.get('agency_id')
 
@@ -62,9 +68,11 @@ class CreateUpdateAgency(View):
 
 
 class DeleteAgency(View):
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:agencies')
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         agency_id = request.POST.get('agency_id')
         agency = Agency.objects.filter(id=agency_id).first()
