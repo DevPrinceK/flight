@@ -134,7 +134,7 @@
         </div>
 
         <div class="side-bar-item" title="Logout" id="logout">
-            <a href="" class="d-flex">
+            <a href="{% url 'accounts:logout' %}" class="d-flex">
                 <div class="icon">
                     <i class="bi bi-lock" style="font-size: 1.5em;"></i>
                 </div>
@@ -167,10 +167,10 @@
                         <div class="content overlay-toggle">
                             <div class="my-3">
                                 <p class="p-0 m-0 text text-center">{{request.user.email|upper}}</p>
-                                <p class="p-0 m-0 text text-center text-muted">Tavel Agency</p>
+                                <p class="p-0 m-0 text text-center text-muted">{{request.user.agency.name}}</p>
                             </div>
                             <a class="drop-item"><i class="bi bi-person"></i> Profile</a>
-                            <a href="" class="drop-item"><i class="bi bi-lock"></i>
+                            <a href="{% url 'accounts:logout' %}" class="drop-item"><i class="bi bi-lock"></i>
                                 Logout</a>
                         </div>
                     </div>
