@@ -31,11 +31,15 @@ urlpatterns += [
 # SEATS
 urlpatterns += [
     path("seats/", views.SeatListView.as_view(), name="seats"),
+    path("create-update-seat/", views.CreateUpdateSeat.as_view(), name="create_update_seat"),  # noqa
+    path("delete-seat/", views.DeleteSeat.as_view(), name="delete_seat"),  # noqa
 ]
 
 # TRIPS
 urlpatterns += [
     path("trips/", views.TripListView.as_view(), name="trips"),
+    path("create-update-trip/", views.CreateUpdateTrip.as_view(), name="create_update_trip"),  # noqa
+    path("delete-trip/", views.DeleteTrip.as_view(), name="delete_trip"),  # noqa
 ]
 
 # CATEGORIES
