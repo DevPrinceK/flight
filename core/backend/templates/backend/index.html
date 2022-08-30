@@ -21,10 +21,11 @@
                 <div class="card mb-2 mt-1">
                     <div class="card-body my-auto py-auto">
                         <div class="row">
-                            <div class="col-6"><span class="p mt-1 text-left badge bg-primary"> Agency </span>
+                            <div class="col-6">
+                                <p class="text-primary"><b>Agency</b></p>
                             </div>
                             <div class="col-6 text-end">
-                                <span class="p mt-1 text-right badge bg-primary">KPS Travel and Tour</span>
+                                <p class="text-primary"><b>{{request.user.agency.name|upper}}</b></p>
                             </div>
                         </div>
                     </div>
