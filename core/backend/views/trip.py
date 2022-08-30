@@ -4,6 +4,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.utils.html import strip_tags
+from django.utils.decorators import method_decorator
+from core.utils.decorators import MustLogin
 from backend.forms import TripForm
 
 from backend.models import Trip, Vehicle
@@ -12,6 +14,7 @@ from backend.models import Trip, Vehicle
 class TripListView(View):
     template = "backend/lists/trips.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         trips = Trip.objects.all().order_by('-id')
         context = {'trips': trips}
@@ -21,6 +24,7 @@ class TripListView(View):
 class CreateUpdateTrip(View):
     template = "backend/create_update_trip.html"
 
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         trip_id = request.GET.get('trip_id')
         vehicle_id = request.GET.get('vehicle_id')
@@ -37,6 +41,7 @@ class CreateUpdateTrip(View):
         }  # noqa
         return render(request, self.template, context)
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         trip_id = request.POST.get('trip_id')
         vehicle_id = request.POST.get('vehicle_id')
@@ -76,9 +81,11 @@ class CreateUpdateTrip(View):
 
 
 class DeleteTrip(View):
+    @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:trips')
 
+    @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         trip_id = request.POST.get('trip_id')
         trip = Trip.objects.filter(id=trip_id).first()
