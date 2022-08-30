@@ -6,12 +6,14 @@ from accounts.manager import AccountManager
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=20)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_agency_admin = models.BooleanField(default=False)
+    agency = models.ForeignKey('backend.Agency', on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date_joined = models.DateTimeField(auto_now_add=True)
 
     objects = AccountManager()
