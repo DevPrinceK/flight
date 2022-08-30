@@ -1,0 +1,29 @@
+<form action="" class="needs-validation my-4" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="seat_id" value="{{seat.id}}">
+
+    <div class="form-group mt-3">
+        <label for="vehicle_id">Vehicle <span class="text text-danger">*</span></label>
+        <select name="vehicle_id" id="vehicle_id" class="form-control">
+            <option value="">Select Vehicle</option>
+            {% for vehicle in vehicles %}
+            <option value="{{vehicle.id}}" {% if seat.vehicle.id == vehicle.id %}selected{% endif %}>{{vehicle.name}}
+            </option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="name">Seat Number <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. Seat Number" value="{{seat.seat_num}}" type="number"
+            name="seat_num" id="seat_num" min="0" max="100" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group my-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
