@@ -1,0 +1,105 @@
+{% extends 'accounts/base.html' %}
+{% block pagetitle %} Register Agency {% endblock %}
+{% load static %}
+{% block content %}
+<!-- NOTE STARTS -->
+<div class="card-sigin mt-2">
+    <div class="main-signup-header mx-auto">
+        <!-- message -->
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <h5 class="fw-semibold mb-4 text-primary text-center">Sign-up your agency with us!</h5>
+        <form action="{% url 'accounts:register_agency' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                <label for="name">Agency Name</label>
+                <input class="form-control" id="name" name="name" placeholder="Enter agency name" type="text" required>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="phone">Agency Phone</label>
+                <input class="form-control" id="phone" name="phone" placeholder="Enter agency phone" type="text"
+                    required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="email">Agency Email</label>
+                <input class="form-control" id="email" name="email" placeholder="Enter agency email" type="email"
+                    required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="address">Agency Address</label>
+                <input class="form-control" id="address" name="text" placeholder="Enter agency email" type="text"
+                    required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="email">Agency Website</label>
+                <input class="form-control" id="email" name="text" placeholder="Enter agency website" type="email"
+                    required>
+            </div>
+            <br>
+            <hr>
+            <center>
+                <b class="text-center text-primary">Who will manage the agency?</b>
+            </center>
+            <hr>
+            <br>
+            <!-- FOR CREATED AGENCY ADMIN -->
+            <div class="form-group mb-3">
+                <label for="firstname">Firstname</label>
+                <input class="form-control" id="firstname" name="firstname" placeholder="Enter your firstname"
+                    type="text" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="lastname">Lastname</label>
+                <input class="form-control" id="lastname" name="lastname" placeholder="Enter your lastname" type="text"
+                    required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="user_email">Email</label> <small class="text-primary">This is what you will login
+                    with</small>
+                <input class="form-control" id="user_email" name="user_email" placeholder="Enter your personal email"
+                    type="email" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="password">Password</label>
+                <input class="form-control" id="password" name="password" placeholder="Enter your password"
+                    type="password" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="confirm-password">Confirm Password</label>
+                <input class="form-control" id="confirm-password" name="confirm_password" placeholder="Confirm Password"
+                    type="password">
+            </div>
+            <button class="btn btn-sm btn-primary btn-block" onclick="matchPassword()" type="submit">Sign Up</button>
+
+        </form>
+        <div class="main-signin-footer mt-5">
+            <p>Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+        </div>
+    </div>
+</div>
+<!--  ENDS -->
+
+
+<script>
+    // confirm password and password confirmation
+    const matchPassword = () => {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        if (password !== confirmPassword) {
+            document.getElementById('confirm-password').setCustomValidity('Passwords do not match.');
+        }
+    }
+</script>
+
+
+{% endblock %}
