@@ -36,7 +36,7 @@ class Vehicle(models.Model):
 
 
 class Seat(models.Model):
-    seat_num = models.IntegerField(default=1)
+    seat_num = models.IntegerField(default=0)
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     is_booked = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
