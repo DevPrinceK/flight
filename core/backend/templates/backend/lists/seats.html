@@ -18,7 +18,8 @@
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title"><span>All Seats</span></h5>
                     <div class="actions">
-                        <a href="" class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Add
+                        <a href="{% url 'backend:create_update_seat' %}" class="btn btn-sm btn-primary text-white"><i
+                                class="bi bi-plus"></i> Add
                             Seat</a>
                     </div>
                 </div>
@@ -49,15 +50,16 @@
                                 <td>{{seat.is_booked}}</td>
                                 <td>{{seat.date_created}}</td>
                                 <td class="text text-center d-flex">
-                                    <a href="" class="px-2">
+                                    <a href="{% url 'backend:create_update_seat' %}?seat_id={{seat.id}}" class="px-2">
                                         <button class="btn btn-sm btn-primary">
                                             <i class="bi bi-pencil"></i>
                                             Edit
                                         </button>
                                     </a>
 
-                                    <form action="" method="POST" class="requires-confirmation"
-                                        data-message="Click on okay to permanently delete this candidate.">
+                                    <form action="{% url 'backend:delete_seat' %}" method="POST"
+                                        class="requires-confirmation"
+                                        data-message="Click on okay to permanently delete this seat.">
                                         <input type="hidden" name="seat_id" value="{{seat.id}}">
                                         {% csrf_token %}
                                         <button class="btn btn-sm btn-danger">
