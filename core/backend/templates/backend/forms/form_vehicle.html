@@ -25,7 +25,8 @@
         <select name="category" id="category" class="form-control">
             <option value="">Select Category</option>
             {% for category in categories %}
-            <option value="{{category.id}}">{{category.name}}</option>
+            <option value="{{category.id}}" {% if vehicle.category.id == category.id %} selected {% endif %}>
+                {{category.name}}</option>
             {% endfor %}
         </select>
         <div class="invalid-feedback">
@@ -37,7 +38,8 @@
         <select name="agency" id="agency" class="form-control">
             <option value="">Select Agency</option>
             {% for agency in agencies %}
-            <option value="{{agency.id}}">{{agency.name}}</option>
+            <option value="{{agency.id}}" {% if vehicle.agency.id == agency.id %} selected {% endif %}>
+                {{agency.name}}</option>
             {% endfor %}
         </select>
         <div class="invalid-feedback">
