@@ -1,0 +1,57 @@
+<form action="" class="needs-validation my-4" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="trip_id" value="{{trip.id}}">
+
+    <div class="form-group mt-3">
+        <label for="vehicle_id">Vehicle <span class="text text-danger">*</span></label>
+        <select name="vehicle_id" id="vehicle_id" class="form-control">
+            <option value="">Select Vehicle</option>
+            {% for vehicle in vehicles %}
+            <option value="{{vehicle.id}}" {% if trip.vehicle.id == vehicle.id %}selected{% endif %}>{{vehicle.name}}
+            </option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="source">Source<span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. Accra" value="{{trip.source}}" type="text" name="source"
+            id="source" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="destination">Destination<span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. Kumasi" value="{{trip.destination}}" type="text"
+            name="destination" id="destination" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="date">Date<span class="text text-danger">*</span></label>
+        {% if trip.date %}
+        <small class="text-primary">Current date: {{trip.date}}</small>
+        {% endif %}
+        <input class="form-control" value="{{trip.date}}" type="date" name="date" id="date" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="time">Time<span class="text text-danger">*</span></label>
+        {% if trip.date %}
+        <small class="text-primary">Current Time: {{trip.time}}</small>
+        {% endif %}
+        <input class="form-control" value="{{trip.time}}" type="time" name="time" id="time" required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group my-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
