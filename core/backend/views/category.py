@@ -5,7 +5,6 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.utils.html import strip_tags
 
-
 from backend.models import VehicleCategory
 from backend.forms import VehicleCategoryForm
 
