@@ -12,7 +12,8 @@ class TripSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TripWithSourceNDestinationSerializer(serializers.ModelSerializer):
+class SearchTripSerializer(serializers.ModelSerializer):
+    agency = serializers.IntegerField(write_only=True)
     source = serializers.CharField(allow_null=True, allow_blank=True)  # noqa
     destination = serializers.CharField(allow_null=True, allow_blank=True)  # noqa
     date = serializers.DateField()  # noqa
@@ -30,8 +31,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 class BookingSerializer(serializers.ModelSerializer):
     user = serializers.IntegerField(write_only=True)
-    seat = serializers.IntegerField(write_only=True)
     trip = serializers.IntegerField(write_only=True)
+
     class Meta:
         model = Booking
         fields = '__all__'
