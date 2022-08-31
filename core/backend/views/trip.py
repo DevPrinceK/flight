@@ -19,7 +19,10 @@ class TripListView(PermissionRequiredMixin, View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        trips = Trip.objects.all().order_by('-id')
+        if request.user.is_staff or request.user.is_superuser:
+            trips = Trip.objects.all().order_by('-id')
+        elif request.user.is_agency_admin:
+            trips = Trip.objects.filter(vehicle__agency=request.user.agency)  # noqa
         context = {'trips': trips}
         return render(request, self.template, context)
 
@@ -35,12 +38,16 @@ class CreateUpdateTrip(PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         trip_id = request.GET.get('trip_id')
         vehicle_id = request.GET.get('vehicle_id')
-
-        trip = Trip.objects.filter(id=trip_id).first()
-        vehicle = Vehicle.objects.filter(id=vehicle_id).first()
-        vehicles = Vehicle.objects.all()
-
-        vehicles = Vehicle.objects.all()
+        if request.user.is_staff or request.user.is_superuser:
+            trip = Trip.objects.filter(id=trip_id).first()
+            vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+            vehicles = Vehicle.objects.all()
+        elif request.user.is_agency_admin:
+            trip = Trip.objects.filter(id=trip_id, vehicle__agency=request.user.agency).first()  # noqa
+            vehicle = Vehicle.objects.filter(id=vehicle_id, agency=request.user.agency).first()  # noqa
+            vehicles = Vehicle.objects.filter(agency=request.user.agency)
+        else:
+            vehicles = {}
         context = {
             "vehicle": vehicle,
             "vehicles": vehicles,
@@ -52,11 +59,17 @@ class CreateUpdateTrip(PermissionRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         trip_id = request.POST.get('trip_id')
         vehicle_id = request.POST.get('vehicle_id')
-        vehicle = Vehicle.objects.filter(id=vehicle_id).first()
-
+        if request.user.is_staff or request.user.is_superuser:
+            vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+        elif request.user.is_agency_admin:
+            vehicle = Vehicle.objects.filter(id=vehicle_id, agency=request.user.agency).first()  # noqa
         if trip_id:
             # trip exists - update trip
-            trip = Trip.objects.filter(id=trip_id).first()
+            if request.user.is_staff or request.user.is_superuser:
+                trip = Trip.objects.filter(id=trip_id).first()
+            elif request.user.is_agency_admin:
+                trip = Trip.objects.filter(id=trip_id, vehicle__agency=request.user.agency).first()  # noqa
+
             form = TripForm(request.POST, request.FILES, instance=trip)  # noqa
             if form.is_valid():
                 new_trip = form.save(commit=False)
@@ -99,7 +112,10 @@ class DeleteTrip(PermissionRequiredMixin, View):
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         trip_id = request.POST.get('trip_id')
-        trip = Trip.objects.filter(id=trip_id).first()
+        if request.user.is_staff or request.user.is_superuser:
+            trip = Trip.objects.filter(id=trip_id).first()
+        elif request.user.is_agency_admin:
+            trip = Trip.objects.filter(id=trip_id, vehicle__agency=request.user.agency).first()  # noqa
         trip.delete()
         messages.success(request, 'Trip Deleted Successfully.')
         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
