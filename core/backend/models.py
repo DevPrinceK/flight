@@ -76,7 +76,7 @@ class Trip(models.Model):
 
 class Booking(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # noqa
-    seat = models.ForeignKey(Seat, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    seats = models.ManyToManyField(Seat, blank=True)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date = models.DateTimeField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -115,4 +115,5 @@ class Transaction(models.Model):
     status_code = models.CharField(max_length=255, null=True, blank=True)
     status_message = models.CharField(max_length=255, null=True, blank=True)
     source_phone = models.CharField(max_length=255, null=True, blank=True)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     created_at = models.DateTimeField(auto_now_add=True)
