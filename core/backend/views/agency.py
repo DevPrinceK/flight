@@ -20,7 +20,10 @@ class AgencyListView(PermissionRequiredMixin, View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        agencies = Agency.objects.all().order_by('-id')
+        if request.user.is_staff or request.user.is_superuser:
+            agencies = Agency.objects.all().order_by('-id')
+        elif request.user.is_agency_admin:
+            agencies = Agency.objects.filter(id=request.user.agency.id)
         context = {'agencies': agencies}
         return render(request, self.template, context)
 
@@ -35,7 +38,10 @@ class CreateUpdateAgency(PermissionRequiredMixin, View):
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         agency_id = request.GET.get('agency_id')
-        agency = Agency.objects.filter(id=agency_id).first()
+        if request.user.is_staff or request.user.is_superuser:
+            agency = Agency.objects.filter(id=agency_id).first()
+        elif request.user.is_agency_admin:
+            agency = Agency.objects.filter(id=request.user.agency.id).first()
         context = {"agency": agency}
         return render(request, self.template, context)
 
@@ -45,7 +51,11 @@ class CreateUpdateAgency(PermissionRequiredMixin, View):
 
         if agency_id:
             # agency exists
-            agency = Agency.objects.filter(id=agency_id).first()
+            if request.user.is_staff or request.user.is_superuser:
+                agency = Agency.objects.filter(id=agency_id).first()
+            elif request.user.is_agency_admin:
+                agency = Agency.objects.filter(
+                    id=request.user.agency.id).first()
             form = AgencyForm(request.POST, request.FILES, instance=agency)  # noqa
             if form.is_valid():
                 agency = form.save(commit=False)
@@ -93,3 +103,4 @@ class DeleteAgency(PermissionRequiredMixin, View):
             return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
         else:
             messages.error(request, "Permission Denied!")
+            return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
