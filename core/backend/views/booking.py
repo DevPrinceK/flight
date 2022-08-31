@@ -14,6 +14,10 @@ class BookingListView(View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        bookings = Booking.objects.all().order_by('-id')
+        if request.user.is_staff or request.user.is_superuser:
+            bookings = Booking.objects.all().order_by('-id')
+        elif request.user.is_agency_admin:
+            bookings = Booking.objects.filter(
+                trip__vehicle__agency=request.user.agency)
         context = {'bookings': bookings}
         return render(request, self.template, context)
