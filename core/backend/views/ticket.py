@@ -15,6 +15,10 @@ class TicketListView(PermissionRequiredMixin, View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        tickets = Ticket.objects.all().order_by('-id')
+        if request.user.is_staff or request.user.is_superuser:
+            tickets = Ticket.objects.all().order_by('-id')
+        elif request.user.is_agency_admin:
+            tickets = Ticket.objects.filter(
+                booking__trip__vehicle__agency=request.user.agency)
         context = {'tickets': tickets}
         return render(request, self.template, context)
