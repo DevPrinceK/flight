@@ -7,6 +7,9 @@ from core.utils.decorators import MustLogin
 
 
 class BookingListView(View):
+    permission_required = [
+        "backend.view_booking",
+    ]
     template = "backend/lists/bookings.html"
 
     @method_decorator(MustLogin)
