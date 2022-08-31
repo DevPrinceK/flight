@@ -12,7 +12,10 @@ from backend.forms import AgencyForm
 from core.utils.decorators import MustLogin
 
 
-class AgencyListView(View):
+class AgencyListView(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.view_agency",
+    ]
     template = "backend/lists/agencies.html"
 
     @method_decorator(MustLogin)
@@ -22,7 +25,11 @@ class AgencyListView(View):
         return render(request, self.template, context)
 
 
-class CreateUpdateAgency(View):
+class CreateUpdateAgency(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.change_agency",
+        "backend.add_agency",
+    ]
     template = "backend/create_update_agency.html"
 
     @method_decorator(MustLogin)
@@ -67,7 +74,11 @@ class CreateUpdateAgency(View):
                 return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
-class DeleteAgency(View):
+class DeleteAgency(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.delete_agency",
+    ]
+
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:agencies')
@@ -75,7 +86,10 @@ class DeleteAgency(View):
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         agency_id = request.POST.get('agency_id')
-        agency = Agency.objects.filter(id=agency_id).first()
-        agency.delete()
-        messages.success(request, 'Agency Deleted Successfully.')
-        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+        if request.user.is_staff or request.user.is_superuser:
+            agency = Agency.objects.filter(id=agency_id).first()
+            agency.delete()
+            messages.success(request, 'Agency Deleted Successfully.')
+            return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+        else:
+            messages.error(request, "Permission Denied!")
