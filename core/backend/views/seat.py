@@ -20,7 +20,10 @@ class SeatListView(PermissionRequiredMixin, View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        seats = Seat.objects.all().order_by('-id')
+        if request.user.is_staff or request.user.is_superuser:
+            seats = Seat.objects.all().order_by('-id')
+        elif request.user.is_agency_admin:
+            seats = Seat.objects.filter(vehicle__agency=request.user.agency)
         context = {'seats': seats}
         return render(request, self.template, context)
 
@@ -37,11 +40,13 @@ class CreateUpdateSeat(PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         seat_id = request.GET.get('seat_id')
         vehicle_id = request.GET.get('vehicle_id')
-
-        seat = Seat.objects.filter(id=seat_id).first()
-        vehicle = Vehicle.objects.filter(id=vehicle_id).first()
-
-        vehicles = Vehicle.objects.all()
+        if request.user.is_staff or request.user.is_superuser:
+            seat = Seat.objects.filter(id=seat_id).first()
+            vehicles = Vehicle.objects.all()
+        elif request.user.is_agency_admin:
+            seat = Seat.objects.filter(id=seat_id, vehicle__agency=request.user.agency).first()  # noqa
+            vehicle = Vehicle.objects.filter(id=vehicle_id, agency=request.user.agency).first()  # noqa
+            vehicles = Vehicle.objects.filter(agency=request.user.agency)
         context = {
             "seat": seat,
             "vehicle": vehicle,
@@ -53,11 +58,17 @@ class CreateUpdateSeat(PermissionRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         seat_id = request.POST.get('seat_id')
         vehicle_id = request.POST.get('vehicle_id')
-        vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+        if request.user.is_staff or request.user.is_superuser:
+            vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+        elif request.user.is_agency_admin:
+            vehicle = Vehicle.objects.filter(id=vehicle_id, agency=request.user.agency).first()  # noqa
 
         if seat_id:
             # seat exists - update seat
-            seat = Seat.objects.filter(id=seat_id).first()
+            if request.user.is_staff or request.user.is_superuser:
+                seat = Seat.objects.filter(id=seat_id).first()
+            elif request.user.is_agency_admin:
+                seat = Seat.objects.filter(id=seat_id, vehicle__agency=request.user.agency).first()  # noqa
             form = SeatForm(request.POST, request.FILES, instance=seat)  # noqa
             if form.is_valid():
                 new_seat = form.save(commit=False)
@@ -100,7 +111,11 @@ class DeleteSeat(PermissionRequiredMixin, View):
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         seat_id = request.POST.get('seat_id')
-        seat = Seat.objects.filter(id=seat_id).first()
+        if request.user.is_staff or request.user.is_superuser:
+            seat = Seat.objects.filter(id=seat_id).first()
+        elif request.user.is_agency_admin:
+            seat = Seat.objects.filter(
+                id=seat_id, vehicle__agency=request.user.agency).first()
         seat.delete()
         messages.success(request, 'Vehicle Seat Deleted Successfully.')
         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
