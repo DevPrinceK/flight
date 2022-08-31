@@ -12,7 +12,10 @@ from backend.models import VehicleCategory
 from backend.forms import VehicleForm
 
 
-class VehicleListView(View):
+class VehicleListView(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.view_vehicle",
+    ]
     template = "backend/lists/vehicles.html"
 
     @method_decorator(MustLogin)
@@ -22,7 +25,11 @@ class VehicleListView(View):
         return render(request, self.template, context)
 
 
-class CreateUpdateVehicle(View):
+class CreateUpdateVehicle(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.add_vehicle",
+        "backend.change_vehicle",
+    ]
     template = "backend/create_update_vehicle.html"
 
     @method_decorator(MustLogin)
@@ -77,7 +84,11 @@ class CreateUpdateVehicle(View):
                 return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
-class DeleteVehicle(View):
+class DeleteVehicle(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.delete_vehicle",
+    ]
+
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:vehicles')
