@@ -20,7 +20,10 @@ class VehicleListView(PermissionRequiredMixin, View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        vehicles = Vehicle.objects.all().order_by('-id')
+        if request.user.is_staff or request.user.is_superuser:
+            vehicles = Vehicle.objects.all().order_by('-id')
+        elif request.user.is_agency_admin:
+            vehicles = Vehicle.objects.filter(agency=request.user.agency)
         context = {'vehicles': vehicles}
         return render(request, self.template, context)
 
@@ -35,8 +38,12 @@ class CreateUpdateVehicle(PermissionRequiredMixin, View):
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         vehicle_id = request.GET.get('vehicle_id')
-        vehicle = Vehicle.objects.filter(id=vehicle_id).first()
-        agencies = Agency.objects.all()
+        if request.user.is_staff or request.user.is_superuser:
+            vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+            agencies = Agency.objects.all()
+        elif request.user.is_agency_admin:
+            vehicle = Vehicle.objects.filter(id=vehicle_id, agency=request.user.agency).first()  # noqa
+            agencies = {request.user.agency}
         categories = VehicleCategory.objects.all().order_by('-id')
         context = {"vehicle": vehicle, "categories": categories, "agencies": agencies}  # noqa
         return render(request, self.template, context)
@@ -46,12 +53,18 @@ class CreateUpdateVehicle(PermissionRequiredMixin, View):
         vehicle_id = request.POST.get('vehicle_id')
         agency_id = request.POST.get('agency')
         category_id = request.POST.get('category')
-        agency = Agency.objects.filter(id=agency_id).first()
+        if request.user.is_staff or request.user.is_superuser:
+            agency = Agency.objects.filter(id=agency_id).first()
+        elif request.user.is_agency_admin:
+            agency = request.user.agency
         category = VehicleCategory.objects.filter(id=category_id).first()
 
         if vehicle_id:
-            # agency exists
-            vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+            # vehicle exists
+            if request.user.is_staff or request.user.is_superuser:
+                vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+            elif request.user.is_agency_admin:
+                vehicle = Vehicle.objects.filter(id=vehicle_id, agency=request.user.agency).first()  # noqa
             form = VehicleForm(request.POST, request.FILES, instance=vehicle)  # noqa
             if form.is_valid():
                 vehicle = form.save(commit=False)
@@ -96,7 +109,11 @@ class DeleteVehicle(PermissionRequiredMixin, View):
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         vehicle_id = request.POST.get('vehicle_id')
-        vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+        if request.user.is_staff or request.user.is_superuser:
+            vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+        elif request.user.is_agency_admin:
+            vehicle = Vehicle.objects.filter(
+                id=vehicle_id, agency=request.user.agency).first()
         vehicle.delete()
         messages.success(request, 'Vehicle Deleted Successfully.')
         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
