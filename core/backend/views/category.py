@@ -11,7 +11,10 @@ from backend.forms import VehicleCategoryForm
 from core.utils.decorators import MustLogin
 
 
-class CategoryListView(View):
+class CategoryListView(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.view_vehiclecategory",
+    ]
     template = "backend/lists/categories.html"
 
     @method_decorator(MustLogin)
@@ -21,7 +24,11 @@ class CategoryListView(View):
         return render(request, self.template, context)
 
 
-class CreateUpdateCategory(View):
+class CreateUpdateCategory(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.add_vehiclecategory",
+        "backend.change_vehiclecategory",
+    ]
     template = "backend/create_update_category.html"
 
     @method_decorator(MustLogin)
@@ -36,7 +43,7 @@ class CreateUpdateCategory(View):
         category_id = request.POST.get('category_id')
 
         if category_id:
-            # agency exists
+            # category exists
             category = VehicleCategory.objects.filter(id=category_id).first()
             form = VehicleCategoryForm(request.POST, request.FILES, instance=category)  # noqa
             if form.is_valid():
@@ -51,7 +58,7 @@ class CreateUpdateCategory(View):
                 messages.warning(request, message)
                 return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
         else:
-            # it's a new agency
+            # it's a new category
             form = VehicleCategoryForm(request.POST, request.FILES)
             if form.is_valid():
                 category = form.save(commit=False)
@@ -66,7 +73,11 @@ class CreateUpdateCategory(View):
                 return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
-class DeleteCategory(View):
+class DeleteCategory(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.delete_vehiclecategory",
+    ]
+
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:categories')
