@@ -16,6 +16,10 @@ class TransactionListView(PermissionRequiredMixin, View):
 
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
-        transactions = Transaction.objects.all().order_by('-id')
+        if request.user.is_staff or request.user.is_superuser:
+            transactions = Transaction.objects.all().order_by('-id')
+        elif request.user.is_agency_admin:
+            transactions = Transaction.objects.filter(
+                booking__trip__vehicle__agency=request.user.agency)
         context = {'transactions': transactions}
         return render(request, self.template, context)
