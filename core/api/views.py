@@ -3,7 +3,7 @@ import json
 from accounts.models import User
 import time
 from core import settings
-from backend.models import Booking, Seat, Transaction, Trip
+from backend.models import Agency, Booking, Seat, Transaction, Trip
 from django.shortcuts import render
 from django.views import View
 from api.serializers import BookingSerializer, RegisterSerializer, TripSerializer, UserSerializer
@@ -63,17 +63,18 @@ class SearchTripsAPI(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        print(request.data)
+        agency_id = request.data['agency']
         source = request.data['source']
         destination = request.data['destination']
+        agency = Agency.objects.filter(id=int(agency_id)).first()
         # date format: YYYY-MM-DD
         date = request.data['date']
-        trips = Trip.objects.filter(date=date, source=source, destination=destination)  # noqa
+        trips = Trip.objects.filter(date=date, source=source, destination=destination, vehicle__agency=agency)  # noqa
         serializer = TripSerializer(trips, many=True)
         if trips:
             return Response(serializer.data)
         else:
-            return Response({"error": "No trips found for your source and destination"}, status=status.HTTP_404_NOT_FOUND)  # noqa
+            return Response({"error": "No trips found for your search query"}, status=status.HTTP_404_NOT_FOUND)  # noqa
 
 
 class BookTripAPI(APIView):
@@ -83,11 +84,22 @@ class BookTripAPI(APIView):
     def post(self, request):
         trip_id = request.data['trip']
         user_id = request.data['user']
-        seat_id = request.data['seat']
+        seat_ids = request.data['seats']
         trip = Trip.objects.filter(id=int(trip_id)).first()
         user = User.objects.filter(id=int(user_id)).first()
-        seat = Seat.objects.filter(id=int(seat_id)).first()
-        booking = Booking.objects.create(seat=seat, user=user, trip=trip)
+        # seat = Seat.objects.filter(id=int(seat_id)).first()
+        booking = Booking.objects.create(user=user, trip=trip)
+        booking.save()
+        for seat_id in seat_ids:
+            try:
+                seat = Seat.objects.filter(id=int(seat_id)).first()
+                booking.seats.add(seat)
+                booking.save()
+                seat.is_booked = True
+                seat.save()
+            except Exception as e:
+                booking.delete()
+                return Response({"error": e}, status=status.HTTP_404_NOT_FOUND)
         serialized = serializers.serialize(queryset=[booking], format='json')
         return Response({"booking": serialized}, status=status.HTTP_201_CREATED)
 
