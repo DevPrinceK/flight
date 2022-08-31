@@ -11,7 +11,10 @@ from backend.forms import TripForm
 from backend.models import Trip, Vehicle
 
 
-class TripListView(View):
+class TripListView(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.view_trip",
+    ]
     template = "backend/lists/trips.html"
 
     @method_decorator(MustLogin)
@@ -21,7 +24,11 @@ class TripListView(View):
         return render(request, self.template, context)
 
 
-class CreateUpdateTrip(View):
+class CreateUpdateTrip(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.add_trip",
+        "backend.change_trip",
+    ]
     template = "backend/create_update_trip.html"
 
     @method_decorator(MustLogin)
@@ -80,7 +87,11 @@ class CreateUpdateTrip(View):
                 return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
-class DeleteTrip(View):
+class DeleteTrip(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.delete_trip",
+    ]
+
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:trips')
