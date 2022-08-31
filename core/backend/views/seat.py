@@ -12,7 +12,10 @@ from backend.forms import SeatForm
 from core.utils.decorators import MustLogin
 
 
-class SeatListView(View):
+class SeatListView(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.view_seat",
+    ]
     template = "backend/lists/seats.html"
 
     @method_decorator(MustLogin)
@@ -22,7 +25,12 @@ class SeatListView(View):
         return render(request, self.template, context)
 
 
-class CreateUpdateSeat(View):
+class CreateUpdateSeat(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.add_seat",
+        "backend.change_seat",
+    ]
+
     template = "backend/create_update_seat.html"
 
     @method_decorator(MustLogin)
@@ -80,7 +88,11 @@ class CreateUpdateSeat(View):
                 return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
 
-class DeleteSeat(View):
+class DeleteSeat(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.delete_seat",
+    ]
+
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         return redirect('backend:seats')
