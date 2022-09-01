@@ -78,6 +78,7 @@
                 </div>
             </a>
         </div>
+        {% if perms.backend.view_vehiclecategory %}
         <div class="side-bar-item" title="category" id="category">
             <a href="{% url 'backend:categories' %}" class="d-flex">
                 <div class="icon">
@@ -88,6 +89,7 @@
                 </div>
             </a>
         </div>
+        {% endif %}
         <div class="side-bar-item" title="trips" id="trips">
             <a href="{% url 'backend:trips' %}" class="d-flex">
                 <div class="icon">
@@ -129,6 +131,17 @@
                 </div>
                 <div class="lable">
                     <span>Transactions</span>
+                </div>
+            </a>
+        </div>
+        <h6 class="item-header mt-3">ACCOUNTS</h6>
+        <div class="side-bar-item" title="Transactions" id="transactions">
+            <a href="{% url 'backend:users' %}" class="d-flex">
+                <div class="icon">
+                    <i class="bi bi-people" style="font-size: 1.5em;"></i>
+                </div>
+                <div class="lable">
+                    <span>Users</span>
                 </div>
             </a>
         </div>
