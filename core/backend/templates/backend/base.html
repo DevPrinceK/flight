@@ -135,6 +135,16 @@
             </a>
         </div>
         <h6 class="item-header mt-3">ACCOUNTS</h6>
+        <div class="side-bar-item" title="Wallets" id="wallets">
+            <a href="{% url 'backend:wallets' %}" class="d-flex">
+                <div class="icon">
+                    <i class="bi bi-people" style="font-size: 1.5em;"></i>
+                </div>
+                <div class="lable">
+                    <span>Wallets</span>
+                </div>
+            </a>
+        </div>
         <div class="side-bar-item" title="Transactions" id="transactions">
             <a href="{% url 'backend:users' %}" class="d-flex">
                 <div class="icon">
@@ -145,7 +155,7 @@
                 </div>
             </a>
         </div>
-
+        <h6 class="item-header mt-3">LOGOUT</h6>
         <div class="side-bar-item" title="Logout" id="logout">
             <a href="{% url 'accounts:logout' %}" class="d-flex">
                 <div class="icon">
