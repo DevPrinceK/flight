@@ -4,64 +4,58 @@ Backend services and api for a flight/trip booking application. This application
   a. create agencies  <br />
   b. update agency details  <br />
   c. delete agencies  <br />
- <br />  <br />
 2. Manage vehicles  <br />
   a. create vehicles  <br />
   b. update vehicles  <br />
   c. delete vehicles  <br />
-<br />
 3. Manage Seats <br />
   a. create seats <br />
   b. update seats <br />
   c. delete seats <br />
-<br />
 4. Manage Vehicle Categories <br />
   a. create vehicle category <br />
   b. update vehicle category <br />
   c. delete vehicle category <br />
-  
 5. Manage Trips <br />
   a. create trips <br />
   b. update trips <br />
-  c. delete trips <br /> <br />
-  
+  c. delete trips <br /> 
 6. Manage Bookings <br />
-  a. view bookings made by end users <br /> <br />
-  
+  a. view bookings made by end users <br />
 7. Manage Transactions <br />
-  a. View transactions going through the system <br /> <br />
-  
+  a. View transactions going through the system <br />
 8. Manage Tickets <br />
-  a. view all system generated tickets <br /> <br />
-
-# Stack
-1. Django
-2. DjangoRestFramework
-3. Django Knox
+  a. view all system generated tickets <br />
+  
+# Languages / Frameworks
+1. Python
+2. Django
+3. DjangoRestFramework
+4. Django Knox
 
 # Installation
-1. Step One:
-Clone the repository
+1. Step One: <br />
+Clone the repository <br />
 ```git clone https://github.com/DevPrinceK/flight.git```
 
-2. Step 2
-Navigate to project
+2. Step 2 <br />
+Navigate to project <br />
 ```cd ./flight```
 
-3. Step 3
-Create Virtual Environment
+3. Step 3 <br />
+Create Virtual Environment <br />
 ```python -m venv venv```
 
-4. Install dependencies
-Navigate to the core of the project
-```cd core```
-Install dependencies from ```requirements.txt file```.
-```pip install requirements.txt```
+4. Install dependencies <br />
+Navigate to the core of the project <br />
+```cd core``` <br />
+Install dependencies from ```requirements.txt file```. <br />
+```pip install requirements.txt``` <br />
 
-5. Makemigrations
-After successful installation of dependencies, make migrations.
-```python manage.py makemigrations```
+5. Makemigrations <br />
+After successful installation of dependencies, make migrations. <br />
+```python manage.py makemigrations``` <br />
 
-After making migrations, ensure to migrate your changes.
-```python manage.py migrate```
+After making migrations, ensure to migrate your changes. <br />
+```python manage.py migrate``` <br />
 
