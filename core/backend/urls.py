@@ -60,3 +60,9 @@ urlpatterns += [
 urlpatterns += [
     path("users/", views.UserListView.as_view(), name="users"),
 ]
+
+
+# WALLETS
+urlpatterns += [
+    path("wallets/", views.WalletListView.as_view(), name="wallets"),
+]
