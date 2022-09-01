@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpResponseRedirect
 from django.utils.html import strip_tags
 from django.utils.decorators import method_decorator
+from accounts.models import User
 
 
 from backend.models import Agency
@@ -40,14 +41,23 @@ class CreateUpdateAgency(PermissionRequiredMixin, View):
         agency_id = request.GET.get('agency_id')
         if request.user.is_staff or request.user.is_superuser:
             agency = Agency.objects.filter(id=agency_id).first()
+            admins = User.objects.filter(is_staff=False, is_superuser=False)
         elif request.user.is_agency_admin:
             agency = Agency.objects.filter(id=request.user.agency.id).first()
-        context = {"agency": agency}
+        context = {"agency": agency, "admins": admins}
         return render(request, self.template, context)
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
         agency_id = request.POST.get('agency_id')
+        agency_admin_id = request.POST.get('agency_admin')
+
+        if agency_admin_id:
+            agency_admin = User.objects.filter(id=int(agency_admin_id)).first()  # noqa
+            agency_admin.is_agency_admin = True
+            agency_admin.save()
+        else:
+            agency_admin = None
 
         if agency_id:
             # agency exists
@@ -60,6 +70,9 @@ class CreateUpdateAgency(PermissionRequiredMixin, View):
             if form.is_valid():
                 agency = form.save(commit=False)
                 agency.save()
+                if agency_admin:
+                    agency_admin.agency = agency
+                    agency_admin.save()
                 messages.success(request, 'Agency Details Updated Successfully.')  # noqa
                 return redirect('backend:agencies')
             else:
@@ -74,6 +87,9 @@ class CreateUpdateAgency(PermissionRequiredMixin, View):
             if form.is_valid():
                 agency = form.save(commit=False)
                 agency.save()
+                if agency_admin:
+                    agency_admin.agency = agency
+                    agency_admin.save()
                 messages.success(request, 'New Agency Created Successfully.')  # noqa
                 return redirect('backend:agencies')
             else:
