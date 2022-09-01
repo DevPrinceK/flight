@@ -18,11 +18,13 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title"><span>All Agencies</span></h5>
+                    {% if perms.backend.add_agency %}
                     <div class="actions">
                         <a href="{% url 'backend:create_update_agency' %}" class="btn btn-sm btn-primary text-white"><i
                                 class="bi bi-plus"></i> Add
                             Agency</a>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="card-body">
                     <table class="table table-sm data-table col-12" id="Agencies" style="min-width: 60em;">
@@ -49,7 +51,7 @@
                                 <td>{{agency.email}}</td>
                                 <td>{{agency.address}}</td>
                                 <td>{{agency.website}}</td>
-                                <td>{{agency.date_joined}}</td>
+                                <td>{{agency.date_joined|date:"d M Y"}}</td>
                                 <td class="text text-center d-flex">
                                     <a href="{% url 'backend:create_update_agency' %}?agency_id={{agency.id}}"
                                         class="px-2">
@@ -58,7 +60,7 @@
                                             Edit
                                         </button>
                                     </a>
-
+                                    {% if perms.backend.delete_agency %}
                                     <form action="{% url 'backend:delete_agency' %}" method="POST"
                                         class="requires-confirmation"
                                         data-message="Click on okay to permanently delete this agency.">
@@ -69,6 +71,7 @@
                                             Delete
                                         </button>
                                     </form>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
