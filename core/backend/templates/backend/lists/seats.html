@@ -48,7 +48,7 @@
                                 <td>{{seat.vehicle.category.name}}</td>
                                 <td>{{seat.seat_num}}</td>
                                 <td>{{seat.is_booked}}</td>
-                                <td>{{seat.date_created}}</td>
+                                <td>{{seat.date_created|date:"d M Y"}}</td>
                                 <td class="text text-center d-flex">
                                     <a href="{% url 'backend:create_update_seat' %}?seat_id={{seat.id}}" class="px-2">
                                         <button class="btn btn-sm btn-primary">
