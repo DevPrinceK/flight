@@ -55,3 +55,8 @@ urlpatterns += [
     path("create-update-agency/", views.CreateUpdateAgency.as_view(), name="create_update_agency"),  # noqa
     path("delete-agency/", views.DeleteAgency.as_view(), name="delete_agency"),  # noqa
 ]
+
+# USERS
+urlpatterns += [
+    path("users/", views.UserListView.as_view(), name="users"),
+]
