@@ -1,38 +1,38 @@
 # Flight Booking App
-Backend services and api for a flight/trip booking application. This application contains the api (to be integrated to mobile apps) that enables one to book and filght, make payments, search for available flights/trips etc. It also contains the backend dashboard for the travel agencies and administrators of the system to manage the entire system. With the backend, admins and agencies can:
-1. Manage agencies
-  a. create agencies
-  b. update agency details
-  c. delete agencies
+Backend services and api for a flight/trip booking application. This application contains the api (to be integrated to mobile apps) that enables one to book and filght, make payments, search for available flights/trips etc. It also contains the backend dashboard for the travel agencies and administrators of the system to manage the entire system. With the backend, admins and agencies can:  <br />
+1. Manage agencies  <br />
+  a. create agencies  <br />
+  b. update agency details  <br />
+  c. delete agencies  <br />
+ <br />  <br />
+2. Manage vehicles  <br />
+  a. create vehicles  <br />
+  b. update vehicles  <br />
+  c. delete vehicles  <br />
+<br />
+3. Manage Seats <br />
+  a. create seats <br />
+  b. update seats <br />
+  c. delete seats <br />
+<br />
+4. Manage Vehicle Categories <br />
+  a. create vehicle category <br />
+  b. update vehicle category <br />
+  c. delete vehicle category <br />
   
-2. Manage vehicles
-  a. create vehicles
-  b. update vehicles
-  c. delete vehicles
-
-3. Manage Seats
-  a. create seats
-  b. update seats
-  c. delete seats
+5. Manage Trips <br />
+  a. create trips <br />
+  b. update trips <br />
+  c. delete trips <br /> <br />
   
-4. Manage Vehicle Categories
-  a. create vehicle category
-  b. update vehicle category
-  c. delete vehicle category
+6. Manage Bookings <br />
+  a. view bookings made by end users <br /> <br />
   
-5. Manage Trips
-  a. create trips
-  b. update trips
-  c. delete trips
+7. Manage Transactions <br />
+  a. View transactions going through the system <br /> <br />
   
-6. Manage Bookings
-  a. view bookings made by end users
-  
-7. Manage Transactions
-  a. View transactions going through the system
-  
-8. Manage Tickets
-  a. view all system generated tickets
+8. Manage Tickets <br />
+  a. view all system generated tickets <br /> <br />
 
 # Stack
 1. Django
