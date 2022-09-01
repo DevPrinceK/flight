@@ -34,7 +34,7 @@
                                 <th>VEHICLE NAME</th>
                                 <th>CATEGORY</th>
                                 <th>AGENCY</th>
-                                <td>DATE ADDED</td>
+                                <th>DATE ADDED</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -47,7 +47,7 @@
                                 <td>{{vehicle.name}}</td>
                                 <td>{{vehicle.category.name}}</td>
                                 <td>{{vehicle.agency.name}}</td>
-                                <td>{{vehicle.date_created}}</td>
+                                <td>{{vehicle.date_created|date:"d M Y"}}</td>
                                 <td class="text text-center d-flex">
                                     <a href="{% url 'backend:create_update_vehicle' %}?vehicle_id={{vehicle.id}}"
                                         class="px-2">
