@@ -1,3 +1,4 @@
+from unicodedata import decimal
 from django.core import serializers
 import json
 from accounts.models import User
@@ -6,7 +7,8 @@ from core import settings
 from backend.models import Agency, Booking, Seat, Transaction, Trip
 from django.shortcuts import render
 from django.views import View
-from api.serializers import BookingSerializer, RegisterSerializer, TripSerializer, UserSerializer
+from api.serializers import BookingSerializer, PaymentSerializer, RegisterSerializer, TripSerializer, UserSerializer
+from core.utils.util_functions import get_transaction_status, receive_payment
 from rest_framework import generics, permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view
@@ -33,6 +35,8 @@ class OverviewAPI(APIView):
             'search-trips': '/api/search-trips/',
             'bookings': '/api/bookings/',
             'book-trip': '/api/book-trip/',
+            'pay-for-trip': '/api/pay-for-trip/',
+            'user-bookings': '/api/user-bookings/',
         }
         return Response(end_points)
 
@@ -116,6 +120,18 @@ class UserBookings(APIView):
         return Response(serializer.data)
 
 
+class VehicleSeatsAPI(APIView):
+    '''endpoint for getting the seats for aparticular vehicle'''
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        vehicle_id = request.data['vehicle']
+        vehicle = Agency.objects.filter(id=int(vehicle_id)).first()
+        seats = Seat.objects.filter(vehicle=vehicle)
+        serializer = SeatSerializer(seats, many=True)
+        return Response(serializer.data)
+
+
 class LoginAPI(KnoxLoginView):
     '''Login api endpoint'''
     permission_classes = (permissions.AllowAny,)
@@ -140,3 +156,62 @@ class SignUpAPI(generics.GenericAPIView):
             "user": UserSerializer(user).data,
             "token": AuthToken.objects.create(user)[1]
         })
+
+
+class PayForTripAPI(APIView):
+    def generate_transaction_id(self):
+        return int(round(time.time() * 10000))
+
+    def post(self, request, *args, **kwargs):
+        booking_id = request.data['booking']
+        serializer = PaymentSerializer(data=request.data)
+        # get the particular booking
+        booking = Booking.objects.filter(id=int(booking_id)).first()
+
+        if serializer.is_valid():
+            serializer.save()
+            transaction_id = self.generate_transaction_id()
+            data = {
+                'transaction_id': transaction_id,
+                'mobile_number': serializer['source_phone'].value,
+                'amount': serializer['amount'].value,
+                'wallet_id': settings.PAYHUB_WALLET_ID,
+                'network_code': serializer['network'].value,
+                'note': 'Payment for booking service',
+            }
+            # initiate payment
+            receive_payment(data)
+
+            transaction_is_successful = False
+            for i in range(4):
+                time.sleep(5)
+                transaction_status = get_transaction_status(transaction_id)  # noqa
+                print(transaction_status)
+                if transaction_status['success'] == True:
+                    transaction_is_successful = True
+                    print('the transaction was successful')
+                    break
+
+            transaction = {
+                'transaction_id': transaction_id,
+                'external_id': "",
+                'amount': serializer['amount'].value,
+                'source_phone': serializer['source_phone'].value,
+                'network': serializer['network'].value,
+                'note': 'Payment for booking service',
+                'status_code': transaction_status['status_code'],
+                'status_message': transaction_status['message'],
+                'booking': booking,
+            }
+            print("Saving Transaction")
+            Transaction.objects.create(**transaction)
+            # credit agency account if transaction is successful
+            if transaction_is_successful:
+                try:
+                    booking.trip.vehicle.agency.wallet.credit_wallet(decimal.Decimal(serializer['amount'].value))  # noqa
+                except Exception as e:
+                    print(e)
+            print('Transaction Saved')
+            return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
+        # if transaction data is not valid
+        return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
