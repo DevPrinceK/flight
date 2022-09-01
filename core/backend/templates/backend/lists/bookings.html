@@ -35,7 +35,6 @@
                                 <th>Vehicle</th>
                                 <th>Seat</th>
                                 <th>Date</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,16 +46,8 @@
                                 <td>{{booking.trip.source}}</td>
                                 <td>{{booking.trip.destination}}</td>
                                 <td>{{booking.trip.vehicle.name}}</td>
-                                <td>{{booking.seat.seat_num}}</td>
-                                <td>{{booking.date}}</td>
-                                <td class="text text-center d-flex">
-                                    <a href="" class="px-2">
-                                        <button class="btn btn-sm btn-primary">
-                                            <i class="bi bi-pencil"></i>
-                                            Edit
-                                        </button>
-                                    </a>
-                                </td>
+                                <td>{{booking.get_seat_numbers}}</td>
+                                <td>{{booking.date_created|date:"d M Y"}}</td>
                             </tr>
                             {% endfor %}
                             {% else %}
