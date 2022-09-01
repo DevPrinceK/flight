@@ -17,15 +17,20 @@
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
-                <a href="" class="btn btn-sm btn-primary text-white"> <i class="bi bi-save"></i> Download Statistics</a>
+                <a href="" class="btn btn-sm btn-primary text-white"> <i class="bi bi-save"></i> Download Statistics <i
+                        class="badge" style="background-color: green;">Soon</i></a>
                 <div class="card mb-2 mt-1">
                     <div class="card-body my-auto py-auto">
                         <div class="row">
                             <div class="col-6">
-                                <p class="text-primary"><b>Agency</b></p>
+                                <h4 class="text-primary"><b>Agency</b></h4>
                             </div>
                             <div class="col-6 text-end">
-                                <p class="text-primary"><b>{{request.user.agency.name|upper}}</b></p>
+                                {% if request.user.is_staff or request.user.is_superuser %}
+                                <h4 class="text-primary"><b>EasyGo Travel Agency</b></h4>
+                                {% else %}
+                                <h4 class="text-primary"><b>{{request.user.agency.name|upper}}</b></h4>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -33,6 +38,154 @@
             </div>
         </div>
 
+        <!-- row -->
+        <div class="row">
+            <!-- col -->
+            <div class="col-lg-6">
+                <div class="card mb-2">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Users</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{total_users}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- col -->
+            <div class="col-lg-6">
+                <div class="card mb-2">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Agencies</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{agencies}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <!-- col -->
+            <div class="col-lg-6">
+                <div class="card mb-2">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Vehicles</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{vehicles}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- col -->
+            <div class="col-lg-6">
+                <div class="card mb-2">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Seats</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{seats}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <!-- col -->
+            <div class="col-lg-6">
+                <div class="card mb-2">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Tickets</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{tickets}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- col -->
+            <div class="col-lg-6">
+                <div class="card mb-2">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Transactions</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{transactions}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <!-- col -->
+            <div class="col-lg-6">
+                <div class="card mb-2">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Trips</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{trips}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- col -->
+            <div class="col-lg-6">
+                <div class="card mb-2">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Bookings</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{bookings}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card mb-2 mt-1">
+                    <div class="card-body my-auto py-auto">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-primary"><b>Total Category</b></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p class="text-primary"><b>{{categories}}</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>
 {% endblock %}
