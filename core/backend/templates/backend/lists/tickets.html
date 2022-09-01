@@ -47,7 +47,7 @@
                                 <td>{{ticket.booking}}</td>
                                 <td>{{ticket.transaction.transaction_id}}</td>
                                 <td>{{ticket.transaction.amount}}</td>
-                                <td>{{ticket.date_created}}</td>
+                                <td>{{ticket.date_created|date:"d M Y"}}</td>
                             </tr>
                             {% endfor %}
                             {% else %}
