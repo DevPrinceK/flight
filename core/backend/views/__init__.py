@@ -7,6 +7,7 @@ from .vehicle import *
 from .ticket import *
 from .transaction import *
 from .users import *
+from .wallets import *
 
 
 class DashboardView(View):
