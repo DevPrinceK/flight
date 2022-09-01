@@ -47,7 +47,7 @@
                                 <td>{{transaction.amount}}</td>
                                 <td>{{transaction.status_code}}</td>
                                 <td>{{transaction.status_message}}</td>
-                                <td>{{transaction.created_at}}</td>
+                                <td>{{transaction.created_at|date:"d M Y"}}</td>
                             </tr>
                             {% endfor %}
                             {% else %}
