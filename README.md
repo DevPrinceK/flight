@@ -72,3 +72,12 @@ Follow the prompts to create a super user accounts.
 7. Runserver
 After creating a superuser account, run the server in other to use the system. <br />
 ```python manage.py runserver```
+
+# Authentication
+The API uses token base authentication, This means that we have to parse in the user token in the header of any request we make.  <br/>
+```
+ headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userInfo.token}`,
+        }
+ ```
