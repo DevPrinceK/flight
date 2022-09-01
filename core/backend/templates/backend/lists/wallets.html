@@ -1,0 +1,68 @@
+{% extends 'backend/base.html' %}
+
+{% block active_item %}wallets{% endblock %}
+{% block page_title %}Wallets{% endblock %}
+
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:backend' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i> Wallets</a>
+</div>
+
+
+<div class="p-3">
+    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Wallets</h4>
+    <div class="row">
+        <section class="col-md-12 mt-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="card-title"><span>All Wallets</span></h5>
+                    <div class="actions">
+                        <a href="" class="btn btn-sm btn-primary text-white">Withdraw
+                            Balance</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm data-table col-12" id="wallets" style="min-width: 60em;">
+                        <caption>List of Wallets</caption>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Wallet ID</th>
+                                <th>Available Balance</th>
+                                <th>Main Balance</th>
+                                <th>Current Balance</th>
+                                <th>Date Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if wallets %}
+                            {% for wallet in wallets %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{wallet.wallet_id}}</td>
+                                <td>{{wallet.available_balance}}</td>
+                                <td>{{wallet.main_balance}}</td>
+                                <td>{{wallet.get_wallet_balance}}</td>
+                                <td>{{wallet.date_added|date:"d M Y"}}</td>
+                            </tr>
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center">No Wallets Found</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}
