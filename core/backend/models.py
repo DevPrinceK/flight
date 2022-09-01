@@ -1,6 +1,8 @@
+import decimal
 import time
 import string
 import random
+import uuid
 from django.db import models
 
 from accounts.models import User
@@ -12,6 +14,7 @@ class Agency(models.Model):
     phone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(max_length=255, null=True, blank=True)
     website = models.CharField(max_length=255, null=True, blank=True)
+    wallet = models.ForeignKey('Wallet', on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date_joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -119,4 +122,48 @@ class Transaction(models.Model):
     status_message = models.CharField(max_length=255, null=True, blank=True)
     source_phone = models.CharField(max_length=255, null=True, blank=True)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    note = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.transaction_id if self.transaction_id else "transaction"
+
+
+class Wallet(models.Model):
+    wallet_id = models.CharField(max_length=100, default=uuid.uuid4)
+    main_balance = models.DecimalField(decimal_places=2, max_digits=10, default=0.0)  # noqa
+    available_balance = models.DecimalField(decimal_places=2, max_digits=50, default=0.0)  # noqa
+    date_added = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def credit_available_balance(self, amount):
+        self.available_balance += decimal.Decimal(amount)
+        self.save()
+
+    def debit_available_balance(self, amount):
+        self.available_balance -= decimal.Decimal(amount)
+        self.save()
+
+    def credit_main_balance(self, amount):
+        self.main_balance += decimal.Decimal(amount)
+        self.save()
+
+    def debit_main_balance(self, amount):
+        self.main_balance -= decimal.Decimal(amount)
+        self.save()
+
+    def credit_wallet(self, amount):
+        self.main_balance += decimal.Decimal(amount)
+        self.available_balance += decimal.Decimal(amount)
+        self.save()
+
+    def debit_wallet(self, amount):
+        self.main_balance -= decimal.Decimal(amount)
+        self.available_balance -= decimal.Decimal(amount)
+        self.save()
+
+    def get_wallet_balance(self):
+        return decimal.Decimal(self.main_balance)
+
+    def __str__(self):
+        return self.wallet_id
