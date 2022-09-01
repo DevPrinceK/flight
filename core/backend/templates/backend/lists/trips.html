@@ -50,7 +50,7 @@
                                 <td>{{trip.destination}}</td>
                                 <td>{{trip.date}}</td>
                                 <td>{{trip.time}}</td>
-                                <td>{{trip.date_created}}</td>
+                                <td>{{trip.date_created|date:"d M Y"}}</td>
                                 <td class="text text-center d-flex">
                                     <a href="{% url 'backend:create_update_trip' %}?trip_id={{trip.id}}" class="px-2">
                                         <button class="btn btn-sm btn-primary">
