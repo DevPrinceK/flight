@@ -81,6 +81,9 @@ class Booking(models.Model):
     date = models.DateTimeField(blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
+    def get_seat_numbers(self):
+        return [seat.seat_num for seat in self.seats.all()]
+
     def __str__(self):
         return self.user.email if self.user.email else "booking"
 
