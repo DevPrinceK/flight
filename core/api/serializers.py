@@ -40,7 +40,7 @@ class BookingSerializer(serializers.ModelSerializer):
 
 class PaymentSerializer(serializers.ModelSerializer):
     network = serializers.CharField(max_length=20, default='MTN')
-    from_phone = serializers.CharField(max_length=15, allow_blank=True)
+    source_phone = serializers.CharField(max_length=15, allow_blank=True)
     amount = serializers.DecimalField(
         decimal_places=3, max_digits=10)
     note = serializers.CharField(max_length=500, default="Payment for trip")
