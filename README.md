@@ -44,7 +44,13 @@ Navigate to project <br />
 
 3. Step 3 <br />
 Create Virtual Environment <br />
-```python -m venv venv```
+```python -m venv venv``` <br />
+Navigate to the virtual env and activate it. <br />
+```cd ../venv``` <br />
+Activate it <br />
+```Scripts/activate``` <br />
+Navigate back to core of the project. <br />
+```cd ..``` <br />
 
 4. Install dependencies <br />
 Navigate to the core of the project <br />
@@ -55,7 +61,14 @@ Install dependencies from ```requirements.txt file```. <br />
 5. Makemigrations <br />
 After successful installation of dependencies, make migrations. <br />
 ```python manage.py makemigrations``` <br />
-
 After making migrations, ensure to migrate your changes. <br />
 ```python manage.py migrate``` <br />
 
+6. Create a superuser
+Create an initial superuser to be able to login. <br />
+```python manage.py createsuperuser``` <br />
+Follow the prompts to create a super user accounts.
+
+7. Runserver
+After creating a superuser account, run the server in other to use the system. <br />
+```python manage.py runserver```
