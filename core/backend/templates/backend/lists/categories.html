@@ -40,7 +40,7 @@
                             <tr>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{category.name}}</td>
-                                <td>{{category.date_created}}</td>
+                                <td>{{category.date_created|date:"D d M Y"}}</td>
                                 <td class="text text-center d-flex">
                                     <a href="{% url 'backend:create_update_category' %}?category_id={{category.id}}"
                                         class="px-2">
