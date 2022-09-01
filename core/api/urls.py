@@ -15,11 +15,19 @@ urlpatterns += [
     path('user-bookings/', views.UserBookings.as_view(), name="user_bookings"),  # noqa
 ]
 
+
+# PAYMENT ENDPOINTS
+urlpatterns += [
+    path('pay-for-trip/', views.PayForTripAPI.as_view(), name="pay_for_trip"),  # noqa
+    # path('check-payment-status/', views.CheckPaymentStatusAPI.as_view(), name="payment_status"),  # noqa
+]
+
 # OTHER TRIP ENDPOINTS
 urlpatterns += [
     path('all-trips/', views.AllTripsAPI.as_view(), name="all_trips"),
     path('trips-today/', views.TripsTodayAPI.as_view(), name="trips_today"),
 ]
+
 
 # KNOX AUTHENTICATION
 urlpatterns += [
