@@ -44,6 +44,21 @@
             Please this field is required.
         </div>
     </div>
+    {% if request.user.is_staff or request.user.is_superuser %}
+    <div class="form-group mt-3">
+        <label for="agency_admin">Agency Administrator <span class="text text-danger">*</span></label>
+        <select name="agency_admin" id="agency_admin" class="form-control">
+            <option value="">Select Agency</option>
+            {% for admin in admins %}
+            <option value="{{admin.id}}" {% if admin.id == user.id %} selected {% endif %}>
+                {{admin.first_name}} - {{admin.email}}</option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    {% endif %}
     <div class="form-group my-3">
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
