@@ -78,6 +78,9 @@ The API uses token base authentication, This means that we have to parse in the 
 ```
  headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Token ${userInfo.token}`,
+          'Authorization': `Token ${user_token}`,
         }
  ```
+ 
+ 
+ # Endpoints Documentation
