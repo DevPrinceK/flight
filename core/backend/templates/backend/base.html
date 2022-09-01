@@ -173,13 +173,13 @@
                         <div class="rounded-profile-picture">
                             <img src="{% static 'images/user_icon.png' %}" alt="User profile picture">
                         </div>
-                        <h6 class="text m-1">{{request.user.email|upper}}</h6>
+                        <h6 class="text m-1">{{request.user.email|lower}}</h6>
                         <button class="btn-white dropdown-toggle" type="button" id="dropdownMenuButton"
                             data-toggle="dropdown" data-target=".content" aria-haspopup="true"
                             aria-expanded="false"></button>
                         <div class="content overlay-toggle">
                             <div class="my-3">
-                                <p class="p-0 m-0 text text-center">{{request.user.email|upper}}</p>
+                                <p class="p-0 m-0 text text-center">{{request.user.email|lower}}</p>
                                 <p class="p-0 m-0 text text-center text-muted">{{request.user.agency.name}}</p>
                             </div>
                             <a class="drop-item"><i class="bi bi-person"></i> Profile</a>
