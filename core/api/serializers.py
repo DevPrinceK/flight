@@ -1,7 +1,7 @@
 from email.policy import default
 from django.contrib.auth import authenticate
 from accounts.models import User
-from backend.models import Booking, Transaction, Trip
+from backend.models import Booking, Transaction, Trip, Seat
 from rest_framework import serializers
 from rest_framework.response import Response
 
@@ -74,3 +74,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(
             email=validated_data['email'], password=validated_data['password'], first_name=validated_data['first_name'], last_name=validated_data['last_name'])
         return user
+
+
+class SeatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seat
+        fields = "__all__"
