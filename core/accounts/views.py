@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group, Permission
 import datetime
 
 
@@ -36,6 +37,9 @@ class RegisterAgencyView(View):
                     user.agency = agency
                     user.first_name = first_name
                     user.last_name = last_name
+                    # assign group to user
+                    group, created = Group.objects.get_or_create(name="Agency")
+                    user.groups.add(group)
                     user.save()
                     # login user after a successful registration
                     user = authenticate(
