@@ -4,10 +4,10 @@ import json
 from accounts.models import User
 import time
 from core import settings
-from backend.models import Agency, Booking, Seat, Transaction, Trip
+from backend.models import Agency, Booking, Seat, Transaction, Trip, Vehicle, Ticket
 from django.shortcuts import render
 from django.views import View
-from api.serializers import BookingSerializer, PaymentSerializer, RegisterSerializer, TripSerializer, UserSerializer
+from api.serializers import BookingSerializer, PaymentSerializer, RegisterSerializer, SeatSerializer, TripSerializer, UserSerializer, TicketSerializer  # noqa
 from core.utils.util_functions import get_transaction_status, receive_payment
 from rest_framework import generics, permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -37,6 +37,8 @@ class OverviewAPI(APIView):
             'book-trip': '/api/book-trip/',
             'pay-for-trip': '/api/pay-for-trip/',
             'user-bookings': '/api/user-bookings/',
+            'get-vehicle-seats': '/api/get-vehicle-seats/',
+            'user-tickets': '/api/user-tickets/',
         }
         return Response(end_points)
 
@@ -119,16 +121,30 @@ class UserBookings(APIView):
         serializer = BookingSerializer(bookings, many=True)
         return Response(serializer.data)
 
+# NOTE: FIX THIS CLASS
+
 
 class VehicleSeatsAPI(APIView):
-    '''endpoint for getting the seats for aparticular vehicle'''
+    '''endpoint for getting the seats for a particular vehicle'''
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
+    def post(self, request):
         vehicle_id = request.data['vehicle']
-        vehicle = Agency.objects.filter(id=int(vehicle_id)).first()
+        vehicle = Vehicle.objects.filter(id=int(vehicle_id)).first()
         seats = Seat.objects.filter(vehicle=vehicle)
         serializer = SeatSerializer(seats, many=True)
+        return Response(serializer.data)
+
+
+class UserTicketsAPI(APIView):
+    '''endpoint for getting the tickets for a particular user'''
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        user_id = request.data['user']
+        user = User.objects.filter(id=int(user_id)).first()
+        tickets = Ticket.objects.filter(transaction__booking__user=user)
+        serializer = TicketSerializer(tickets, many=True)
         return Response(serializer.data)
 
 
