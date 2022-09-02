@@ -33,7 +33,7 @@ class DashboardView(View):
             trips = Trip.objects.filter(vehicle__agency=user_agency).count()  # noqa
             bookings = Booking.objects.filter(trip__vehicle__agency=user_agency).count()  # noqa
             tickets = Ticket.objects.filter(
-                booking__trip__vehicle__agency=user_agency).count()
+                transaction__booking__trip__vehicle__agency=user_agency).count()
             transactions = Transaction.objects.filter(
                 booking__trip__vehicle__agency=user_agency).count()
         categories = VehicleCategory.objects.all().count()
