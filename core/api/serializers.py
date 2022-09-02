@@ -1,7 +1,7 @@
 from email.policy import default
 from django.contrib.auth import authenticate
 from accounts.models import User
-from backend.models import Booking, Transaction, Trip, Seat
+from backend.models import Booking, Transaction, Trip, Seat, Ticket
 from rest_framework import serializers
 from rest_framework.response import Response
 
@@ -79,4 +79,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 class SeatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seat
+        fields = "__all__"
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
         fields = "__all__"
