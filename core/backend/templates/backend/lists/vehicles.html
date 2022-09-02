@@ -67,6 +67,13 @@
                                             Delete
                                         </button>
                                     </form>
+
+                                    <a href="{% url 'backend:free_vehicle_seats' %}?vehicle_id={{vehicle.id}}"
+                                        class="px-2">
+                                        <button class="btn btn-sm btn-secondary">
+                                            Free Seats
+                                        </button>
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}
