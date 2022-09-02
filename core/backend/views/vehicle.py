@@ -7,7 +7,7 @@ from django.utils.html import strip_tags
 from django.utils.decorators import method_decorator
 from core.utils.decorators import MustLogin
 
-from backend.models import Agency, Vehicle
+from backend.models import Agency, Seat, Vehicle
 from backend.models import VehicleCategory
 from backend.forms import VehicleForm
 
@@ -116,4 +116,30 @@ class DeleteVehicle(PermissionRequiredMixin, View):
                 id=vehicle_id, agency=request.user.agency).first()
         vehicle.delete()
         messages.success(request, 'Vehicle Deleted Successfully.')
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+class FreeVehicleSeatView(PermissionRequiredMixin, View):
+    permission_required = [
+        "backend.change_seat",
+        "backend.change_vehicle",
+    ]
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        vehicle_id = request.GET.get('vehicle_id')
+        if request.user.is_staff or request.user.is_superuser:
+            vehicle = Vehicle.objects.filter(id=vehicle_id).first()
+        elif request.user.is_agency_admin:
+            vehicle = Vehicle.objects.filter(
+                id=vehicle_id, agency=request.user.agency).first()
+
+        seats = Seat.objects.filter(vehicle=vehicle)
+        if seats:
+            for seat in seats:
+                seat.is_booked = False
+                seat.save()
+            messages.success(request, 'All Seats are now free.')
+        else:
+            messages.warning(request, 'No Seats found for this vehicle.')
         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
