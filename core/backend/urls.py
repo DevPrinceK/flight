@@ -11,6 +11,8 @@ urlpatterns += [
     path("vehicles/", views.VehicleListView.as_view(), name="vehicles"),
     path("create-update-vehicle/", views.CreateUpdateVehicle.as_view(), name="create_update_vehicle"),  # noqa
     path("delete-vehicle/", views.DeleteVehicle.as_view(), name="delete_vehicle"),  # noqa
+    path("free-vehicle-seats/",
+         views.FreeVehicleSeatView.as_view(), name="free_vehicle_seats"),  # noqa
 ]
 
 # TRANSACTIONS
