@@ -97,14 +97,13 @@ class Booking(models.Model):
 class Ticket(models.Model):
     def generate_ticket_id():
         time_id = str(int(time.time() * 1000))
-        return time_id.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    ticket_id = models.CharField(max_length=255, null=True, blank=True)
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+        return "".join(random.choices(string.ascii_uppercase + time_id + string.digits, k=12))
+    ticket_id = models.CharField(max_length=100, default=generate_ticket_id)
     transaction = models.ForeignKey('Transaction', on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.seat if self.seat else "ticket"
+        return self.ticket_id if self.ticket_id else "ticket"
 
     class Meta:
         db_table = 'ticket'
