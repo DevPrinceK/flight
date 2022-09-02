@@ -18,10 +18,6 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <h5 class="card-title"><span>All Tickets</span></h5>
-                    <div class="actions">
-                        <a href="" class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Add
-                            Ticket</a>
-                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table table-sm data-table col-12" id="Tickets" style="min-width: 60em;">
@@ -43,8 +39,8 @@
                             <tr>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{ticket.ticket_id}}</td>
-                                <td>{{ticket.booking.user}}</td>
-                                <td>{{ticket.booking}}</td>
+                                <td>{{ticket.transaction.booking.user}}</td>
+                                <td>{{ticket.transaction.booking}}</td>
                                 <td>{{ticket.transaction.transaction_id}}</td>
                                 <td>{{ticket.transaction.amount}}</td>
                                 <td>{{ticket.date_created|date:"d M Y"}}</td>
