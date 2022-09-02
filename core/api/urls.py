@@ -19,7 +19,18 @@ urlpatterns += [
 # PAYMENT ENDPOINTS
 urlpatterns += [
     path('pay-for-trip/', views.PayForTripAPI.as_view(), name="pay_for_trip"),  # noqa
-    # path('check-payment-status/', views.CheckPaymentStatusAPI.as_view(), name="payment_status"),  # noqa
+]
+
+
+# SEATS ENDPOINTS
+urlpatterns += [
+    path('get-vehicle-seats/', views.VehicleSeatsAPI.as_view(), name="get_vehicle_seats"),  # noqa
+]
+
+
+# USER TICKETS ENDPOINTS
+urlpatterns += [
+    path('user-tickets/', views.UserTicketsAPI.as_view(), name="user_tickets"),  # noqa
 ]
 
 # OTHER TRIP ENDPOINTS
