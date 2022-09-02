@@ -23,13 +23,13 @@
                     <div class="card-body my-auto py-auto">
                         <div class="row">
                             <div class="col-6">
-                                <h4 class="text-primary"><b>Agency</b></h4>
+                                <h5 class="text-primary"><b>Agency</b></h5>
                             </div>
                             <div class="col-6 text-end">
                                 {% if request.user.is_staff or request.user.is_superuser %}
-                                <h4 class="text-primary"><b>EasyGo Transport Agency</b></h4>
+                                <h5 class="text-primary"><b>EasyGo Transport Agency</b></h5>
                                 {% else %}
-                                <h4 class="text-primary"><b>{{request.user.agency.name|upper}}</b></h4>
+                                <h5 class="text-primary"><b>{{request.user.agency.name|upper}}</b></h5>
                                 {% endif %}
                             </div>
                         </div>
