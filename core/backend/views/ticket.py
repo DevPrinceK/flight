@@ -19,6 +19,6 @@ class TicketListView(PermissionRequiredMixin, View):
             tickets = Ticket.objects.all().order_by('-id')
         elif request.user.is_agency_admin:
             tickets = Ticket.objects.filter(
-                booking__trip__vehicle__agency=request.user.agency)
+                transaction__booking__trip__vehicle__agency=request.user.agency)
         context = {'tickets': tickets}
         return render(request, self.template, context)
