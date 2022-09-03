@@ -1,5 +1,5 @@
 # Flight Booking App
-Backend services and api for a flight/trip booking application. This application contains the api (to be integrated to mobile apps) that enables one to book and filght, make payments, search for available flights/trips etc. It also contains the backend dashboard for the travel agencies and administrators of the system to manage the entire system. With the backend, admins and agencies can:  <br />
+Backend and api services for a flight/trip booking application. This application contains the api (to be integrated to mobile apps) that enables one to book and filght, make payments, search for available flights/trips etc. It also contains the backend dashboard for the travel agencies and administrators of the system to manage the entire system. With the backend, admins and agencies can:  <br />
 1. Manage agencies  <br />
   a. create agencies  <br />
   b. update agency details  <br />
