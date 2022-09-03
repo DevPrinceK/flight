@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-x9_iej!@kjtrqq3ax1u!je-f0fk9_buv%6l#ol36^=!&b!vb-0'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['104.248.50.27', '*']
 
@@ -120,3 +120,9 @@ REST_FRAMEWORK = {
         'knox.auth.TokenAuthentication',
     ]
 }
+
+# enviroment variables
+PAYHUB_SECRET_TOKEN = os.getenv(
+    'PAYHUB_SECRET_TOKEN', "605c4bc8f16040ce7180715fbdfde75a2db8585da73a666deaa5f5556edfcd3f")
+PAYHUB_WALLET_ID = os.getenv(
+    'PAYHUB_WALLET_ID', "e55551f0-3ca5-4481-b1d4-eebde7339a96")
