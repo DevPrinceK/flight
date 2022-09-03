@@ -1,0 +1,28 @@
+<form action="" class="needs-validation my-4" enctype="multipart/form-data" method="POST">
+    {% csrf_token %}
+
+    <div class="form-group mt-3">
+        <label for="name">MOMO Number <span class="text text-danger">*</span></label>
+        <input class="form-control" placeholder="E.g. 0558366133" type="text" name="momo_number" id="momo_number"
+            required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="network">Network <span class="text text-danger">*</span></label>
+        <select name="network" id="network" class="form-control">
+            <option value="">Select Network</option>
+            {% for key, val in networks.items %}
+            <option value="{{key}}">{{val}}</option>
+            {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group my-3">
+        <button type="submit" class="btn btn-primary">Initiate Cashout</button>
+    </div>
+</form>
