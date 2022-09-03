@@ -166,3 +166,8 @@ class Wallet(models.Model):
 
     def __str__(self):
         return self.wallet_id
+
+    class Meta:
+        permissions = [
+            ("cashout_from_wallet", "Can cashout from wallet"),
+        ]
