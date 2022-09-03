@@ -67,4 +67,5 @@ urlpatterns += [
 # WALLETS
 urlpatterns += [
     path("wallets/", views.WalletListView.as_view(), name="wallets"),
+    path("cashout/", views.CashoutView.as_view(), name="cashout"),
 ]
