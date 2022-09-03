@@ -25,6 +25,7 @@ class DashboardView(View):
             bookings = Booking.objects.all().count()
             tickets = Ticket.objects.all().count()
             transactions = Transaction.objects.all().count()
+            wallet_balance = 0
         elif request.user.is_agency_admin:
             total_users = User.objects.filter(agency=user_agency).count()  # noqa
             agencies = Agency.objects.filter(id=user_agency.id).count()
@@ -36,6 +37,7 @@ class DashboardView(View):
                 transaction__booking__trip__vehicle__agency=user_agency).count()
             transactions = Transaction.objects.filter(
                 booking__trip__vehicle__agency=user_agency).count()
+            wallet_balance = request.user.agency.wallet.get_wallet_balance()
         categories = VehicleCategory.objects.all().count()
 
         context = {
@@ -48,5 +50,6 @@ class DashboardView(View):
             "bookings": bookings,
             "tickets": tickets,
             "transactions": transactions,
+            "wallet_balance": wallet_balance,
         }
         return render(request, self.template, context)
