@@ -121,8 +121,6 @@ class UserBookings(APIView):
         serializer = BookingSerializer(bookings, many=True)
         return Response(serializer.data)
 
-# NOTE: FIX THIS CLASS
-
 
 class VehicleSeatsAPI(APIView):
     '''endpoint for getting the seats for a particular vehicle'''
