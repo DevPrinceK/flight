@@ -95,3 +95,4 @@ class CashoutView(PermissionRequiredMixin, View):
         # if transaction data is not valid
         messages.error(request, 'Cashout could not be processed')
         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
