@@ -6,6 +6,7 @@ app_name = "api"
 urlpatterns = [
     path("", views.OverviewAPI.as_view(), name="overview"),
     path('sign-up/', views.SignUpAPI.as_view(), name="sign_up"),
+    path('user-profile/', views.UserProfileAPI.as_view(), name="user_profile"),
 ]
 
 # TRIPS ENDPOINTS
