@@ -39,8 +39,22 @@ class OverviewAPI(APIView):
             'user-bookings': '/api/user-bookings/',
             'get-vehicle-seats': '/api/get-vehicle-seats/',
             'user-tickets': '/api/user-tickets/',
+            'user-profile': '/api/user-profile',
         }
         return Response(end_points)
+
+
+class UserProfileAPI(APIView):
+    '''endpoint for getting user details from a given token'''
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        # extract token key from user tokenand use it to find the user
+        token_str = request.META.get('HTTP_AUTHORIZATION').split(' ')[1][0:8]
+        user = AuthToken.objects.filter(
+            token_key=token_str).first().user
+        serializer = UserSerializer(user, many=False)
+        return Response({"user": serializer.data})
 
 
 class AllTripsAPI(APIView):
@@ -197,7 +211,7 @@ class PayForTripAPI(APIView):
             receive_payment(data)
 
             transaction_is_successful = False
-            for i in range(4):
+            for i in range(5):
                 time.sleep(5)
                 transaction_status = get_transaction_status(transaction_id)  # noqa
                 print(transaction_status)
@@ -222,7 +236,10 @@ class PayForTripAPI(APIView):
             # credit agency account if transaction is successful
             if transaction_is_successful:
                 try:
-                    booking.trip.vehicle.agency.wallet.credit_wallet(decimal.Decimal(serializer['amount'].value))  # noqa
+                    # credit agency wallet with 95% of amount
+                    agency_amount = 0.95 * decimal.Decimal(serializer['amount'].value)  # noqa
+                    booking.trip.vehicle.agency.wallet.credit_wallet(decimal.Decimal(agency_amount))  # noqa
+                    print(f"AGENCY ACCOUNT CREDITED WITH {agency_amount}")
                 except Exception as e:
                     print(e)
             print('Transaction Saved')
