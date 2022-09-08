@@ -34,6 +34,12 @@ urlpatterns += [
     path('user-tickets/', views.UserTicketsAPI.as_view(), name="user_tickets"),  # noqa
 ]
 
+
+# AGENCY ENDPOINTS
+urlpatterns += [
+    path('all-agencies/', views.AllAgenciesAPI.as_view(), name="agencies"),
+]
+
 # OTHER TRIP ENDPOINTS
 urlpatterns += [
     path('all-trips/', views.AllTripsAPI.as_view(), name="all_trips"),
