@@ -3,7 +3,16 @@
 
     <div class="form-group mt-3">
         <label for="name">MOMO Number <span class="text text-danger">*</span></label>
-        <input class="form-control" placeholder="E.g. 0558366133" type="text" name="momo_number" id="momo_number"
+        <input class="form-control" placeholder="E.g. 0558366133" type="text" name="source_phone" id="source_phone"
+            required>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="name">Amount<span class="text text-danger">*</span></label> <small class="text-primary">The least
+            you can cashout is GHC1.00</small>
+        <input class="form-control" placeholder="E.g. 5" type="number" name="amount" id="amount" min="1" step="0.1"
             required>
         <div class="invalid-feedback">
             Please this field is required.
