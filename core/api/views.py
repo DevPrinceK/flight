@@ -7,7 +7,7 @@ from core import settings
 from backend.models import Agency, Booking, Seat, Transaction, Trip, Vehicle, Ticket
 from django.shortcuts import render
 from django.views import View
-from api.serializers import BookingSerializer, PaymentSerializer, RegisterSerializer, SeatSerializer, TripSerializer, UserSerializer, TicketSerializer  # noqa
+from api.serializers import BookingSerializer, PaymentSerializer, RegisterSerializer, SeatSerializer, TripSerializer, UserSerializer, TicketSerializer, AgencySerializer  # noqa
 from core.utils.util_functions import get_transaction_status, receive_payment
 from rest_framework import generics, permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -39,7 +39,8 @@ class OverviewAPI(APIView):
             'user-bookings': '/api/user-bookings/',
             'get-vehicle-seats': '/api/get-vehicle-seats/',
             'user-tickets': '/api/user-tickets/',
-            'user-profile': '/api/user-profile',
+            'user-profile': '/api/user-profile/',
+            'all-agencies': '/api/all-agencies/',
         }
         return Response(end_points)
 
@@ -158,6 +159,16 @@ class UserTicketsAPI(APIView):
         tickets = Ticket.objects.filter(transaction__booking__user=user)
         serializer = TicketSerializer(tickets, many=True)
         return Response(serializer.data)
+
+
+class AllAgenciesAPI(APIView):
+    '''endpoint for getting all agencies'''
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        agencies = Agency.objects.all()
+        serializer = AgencySerializer(agencies, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class LoginAPI(KnoxLoginView):
