@@ -1,7 +1,7 @@
 from email.policy import default
 from django.contrib.auth import authenticate
 from accounts.models import User
-from backend.models import Booking, Transaction, Trip, Seat, Ticket
+from backend.models import Booking, Transaction, Trip, Seat, Ticket, Agency
 from rest_framework import serializers
 from rest_framework.response import Response
 
@@ -20,6 +20,12 @@ class SearchTripSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trip
+        fields = '__all__'
+
+
+class AgencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agency
         fields = '__all__'
 
 
