@@ -8,6 +8,7 @@ from .ticket import *
 from .transaction import *
 from .users import *
 from .wallets import *
+from core.utils.util_functions import get_api_wallet_balance
 
 
 class DashboardView(View):
@@ -25,7 +26,7 @@ class DashboardView(View):
             bookings = Booking.objects.all().count()
             tickets = Ticket.objects.all().count()
             transactions = Transaction.objects.all().count()
-            wallet_balance = 0
+            wallet_balance = get_api_wallet_balance()
         elif request.user.is_agency_admin:
             total_users = User.objects.filter(agency=user_agency).count()  # noqa
             agencies = Agency.objects.filter(id=user_agency.id).count()
