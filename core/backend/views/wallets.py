@@ -1,3 +1,4 @@
+import decimal
 import time
 from core import settings
 from django.shortcuts import render, redirect
@@ -10,7 +11,7 @@ from django.utils.decorators import method_decorator
 from api.serializers import PaymentSerializer
 from core.utils.decorators import MustLogin
 from backend.models import Transaction, Wallet
-from core.utils.util_functions import get_transaction_status, make_payment
+from core.utils.util_functions import get_api_wallet_balance, get_transaction_status, make_payment
 
 
 class WalletListView(PermissionRequiredMixin, View):
@@ -40,7 +41,7 @@ class CashoutView(PermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         networks = {
             "MTN": "MTN",
-            "VODA": "VODA",
+            "VOD": "VODA",
         }
         context = {
             "networks": networks,
@@ -52,47 +53,61 @@ class CashoutView(PermissionRequiredMixin, View):
 
     @method_decorator(MustLogin)
     def post(self, request, *args, **kwargs):
-        serializer = PaymentSerializer(data=request.data)
-        # get the particular booking
-        if serializer.is_valid():
-            serializer.save()
-            transaction_id = self.generate_transaction_id()
-            data = {
-                'transaction_id': transaction_id,
-                'mobile_number': serializer['source_phone'].value,
-                'amount': serializer['amount'].value,
-                'wallet_id': settings.PAYHUB_WALLET_ID,
-                'network_code': serializer['network'].value,
-                'note': 'Cashout',
-            }
-            # initiate payment
+        phone = request.POST.get('source_phone')
+        amount = request.POST.get('amount')
+        network = request.POST.get('network')
+        transaction_id = self.generate_transaction_id()
+        can_proceed_with_transaction = False
+        if request.user.is_staff or request.user.is_superuser:
+            if (get_api_wallet_balance() > 1) and (get_api_wallet_balance() > decimal.Decimal(amount)):
+                can_proceed_with_transaction = True
+        elif request.user.is_agency_admin:
+            agency_balance = request.user.agency.wallet.main_balance
+            if (agency_balance > 1) and (agency_balance > decimal.Decimal(amount)):
+                can_proceed_with_transaction = True
+        if not can_proceed_with_transaction:
+            messages.error(request, "Insufficient balance")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        data = {
+            'transaction_id': transaction_id,
+            'mobile_number': phone,
+            'amount': decimal.Decimal(amount),
+            'wallet_id': settings.PAYHUB_WALLET_ID,
+            'network_code': network,
+            'note': 'Cashout',
+        }
+        # initiate payment
+        try:
             make_payment(data)
+        except ConnectionError:
+            messages.error(
+                request, "Connection Error! Ensure you have active internet connection")
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-            for i in range(4):
-                time.sleep(5)
-                transaction_status = get_transaction_status(transaction_id)  # noqa
-                print(transaction_status)
-                if transaction_status['success'] == True:
-                    print('the transaction was successful')
-                    break
+        for i in range(5):
+            time.sleep(5)
+            transaction_status = get_transaction_status(transaction_id)  # noqa
+            print(transaction_status)
+            if transaction_status['success'] == True:
+                print('the transaction was successful')
+                break
 
-            transaction = {
-                'transaction_id': transaction_id,
-                'external_id': "",
-                'amount': serializer['amount'].value,
-                'source_phone': serializer['source_phone'].value,
-                'network': serializer['network'].value,
-                'note': 'Payment for booking service',
-                'status_code': transaction_status['status_code'],
-                'status_message': transaction_status['message'],
-                'booking': None,
-            }
-            print("Saving Transaction")
-            Transaction.objects.create(**transaction)
-            print('Transaction Saved')
-            messages.success(request, 'Cashout was successful')
-            return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
-        # if transaction data is not valid
-        messages.error(request, 'Cashout could not be processed')
+        transaction = {
+            'transaction_id': transaction_id,
+            'external_id': "",
+            'amount': decimal.Decimal(amount),
+            'source_phone': phone,
+            'network': network,
+            'note': 'Payment for booking service',
+            'status_code': transaction_status['status_code'],
+            'status_message': transaction_status['message'],
+            'booking': None,
+        }
+        print("Saving Transaction")
+        cashout = Transaction.objects.create(**transaction)
+        print('Transaction Saved')
+        if cashout.status_code == "000":
+            messages.success(request, "Cashout Successful")
+        else:
+            messages.success(request, 'Transaction is pending')
         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
-
