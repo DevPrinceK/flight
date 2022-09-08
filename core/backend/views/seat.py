@@ -42,6 +42,7 @@ class CreateUpdateSeat(PermissionRequiredMixin, View):
         vehicle_id = request.GET.get('vehicle_id')
         if request.user.is_staff or request.user.is_superuser:
             seat = Seat.objects.filter(id=seat_id).first()
+            vehicle = Vehicle.objects.filter(id=vehicle_id).first()  # noqa
             vehicles = Vehicle.objects.all()
         elif request.user.is_agency_admin:
             seat = Seat.objects.filter(id=seat_id, vehicle__agency=request.user.agency).first()  # noqa
