@@ -26,10 +26,10 @@
                             <tr>
                                 <th>#</th>
                                 <th>Trans ID</th>
-                                <th>Ext ID</th>
                                 <th>Phone</th>
                                 <th>Network</th>
                                 <th>Amount</th>
+                                <th>Type</th>
                                 <th>Status Code</th>
                                 <th>Message</th>
                                 <th>Date Created</th>
@@ -41,10 +41,10 @@
                             <tr>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{transaction.transaction_id}}</td>
-                                <td>{{transaction.external_id}}</td>
                                 <td>{{transaction.source_phone}}</td>
                                 <td>{{transaction.network}}</td>
                                 <td>{{transaction.amount}}</td>
+                                <td>{{transaction.transaction_type}}</td>
                                 <td>{{transaction.status_code}}</td>
                                 <td>{{transaction.status_message}}</td>
                                 <td>{{transaction.created_at|date:"d M Y"}}</td>
