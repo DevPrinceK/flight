@@ -33,6 +33,7 @@
                                 <th>Vehicle</th>
                                 <th>Source</th>
                                 <th>Destination</th>
+                                <th>Price</th>
                                 <th>Date</th>
                                 <th>Time</th>
                                 <th>Date Created</th>
@@ -48,6 +49,7 @@
                                 <td>{{trip.vehicle.name}}</td>
                                 <td>{{trip.source}}</td>
                                 <td>{{trip.destination}}</td>
+                                <td>GHC{{trip.price|floatformat:2}}</td>
                                 <td>{{trip.date}}</td>
                                 <td>{{trip.time}}</td>
                                 <td>{{trip.date_created|date:"d M Y"}}</td>
