@@ -102,6 +102,7 @@ class CashoutView(PermissionRequiredMixin, View):
             'status_code': transaction_status['status_code'],
             'status_message': transaction_status['message'],
             'booking': None,
+            'transaction_type': "Cashout",
         }
         print("Saving Transaction")
         cashout = Transaction.objects.create(**transaction)
