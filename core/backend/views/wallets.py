@@ -98,7 +98,7 @@ class CashoutView(PermissionRequiredMixin, View):
             'amount': decimal.Decimal(amount),
             'source_phone': phone,
             'network': network,
-            'note': 'Payment for booking service',
+            'note': 'Cashout Transaction',
             'status_code': transaction_status['status_code'],
             'status_message': transaction_status['message'],
             'booking': None,
