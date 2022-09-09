@@ -49,7 +49,7 @@ class UserProfileAPI(APIView):
     '''endpoint for getting user details from a given token'''
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         # extract token key from user tokenand use it to find the user
         try:
             token_str = request.META.get(
