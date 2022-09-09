@@ -28,10 +28,10 @@
                             <div class="col-6 text-end">
                                 {% if request.user.is_staff or request.user.is_superuser %}
                                 <h5 class="text-primary"><b>EasyGo Transport Agency</b></h5>
-                                <b>Current Balance: GH₵{{wallet_balance|intcomma}} </b>
+                                <b>Current Balance: GH₵{{wallet_balance|floatformat:2}} </b>
                                 {% else %}
                                 <h5 class="text-primary"><b>{{request.user.agency.name|upper}}</b></h5>
-                                <b>Current Balance: GH₵{{wallet_balance|intcomma}} </b>
+                                <b>Current Balance: GH₵{{wallet_balance|floatformat:2}} </b>
                                 {% endif %}
                             </div>
                         </div>
