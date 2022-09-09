@@ -51,7 +51,11 @@ class UserProfileAPI(APIView):
 
     def get(self, request, *args, **kwargs):
         # extract token key from user tokenand use it to find the user
-        token_str = request.META.get('HTTP_AUTHORIZATION').split(' ')[1][0:8]
+        try:
+            token_str = request.META.get(
+                'HTTP_AUTHORIZATION').split(' ')[1][0:8]
+        except AttributeError:
+            return Response({'error': 'No token found'})
         user = AuthToken.objects.filter(
             token_key=token_str).first().user
         serializer = UserSerializer(user, many=False)
