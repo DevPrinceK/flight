@@ -245,6 +245,7 @@ class PayForTripAPI(APIView):
                 'status_code': transaction_status['status_code'],
                 'status_message': transaction_status['message'],
                 'booking': booking,
+                'transaction_type': "CashIn",
             }
             print("Saving Transaction")
             Transaction.objects.create(**transaction)
