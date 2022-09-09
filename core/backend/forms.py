@@ -34,4 +34,4 @@ class VehicleCategoryForm(forms.ModelForm):
 class TripForm(forms.ModelForm):
     class Meta:
         model = Trip
-        fields = ['source', 'destination', 'date', 'time']
+        fields = ['source', 'destination', 'price', 'date', 'time']
