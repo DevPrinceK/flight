@@ -66,6 +66,7 @@ class Trip(models.Model):
     vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     source = models.CharField(max_length=255, null=True, blank=True)
     destination = models.CharField(max_length=255, null=True, blank=True)
+    price = models.DecimalField(decimal_places=3, max_digits=10, default=0)
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
