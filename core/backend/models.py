@@ -123,6 +123,7 @@ class Transaction(models.Model):
     source_phone = models.CharField(max_length=255, null=True, blank=True)
     booking = models.ForeignKey(Booking, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     note = models.CharField(max_length=255, null=True, blank=True)
+    transaction_type = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
