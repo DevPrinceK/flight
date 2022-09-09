@@ -84,12 +84,16 @@ class SearchTripsAPI(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        agency_id = request.data['agency']
-        source = request.data['source']
-        destination = request.data['destination']
+        # agency_id = request.data['agency']
+        # source = request.data['source']
+        # destination = request.data['destination']
+        agency_id = request.data.get('agency')
+        source = request.data.get('source')
+        destination = request.data.get('destination')
         agency = Agency.objects.filter(id=int(agency_id)).first()
         # date format: YYYY-MM-DD
-        date = request.data['date']
+        # date = request.data['date']
+        date = request.data.get('date')
         trips = Trip.objects.filter(date=date, source=source, destination=destination, vehicle__agency=agency)  # noqa
         serializer = TripSerializer(trips, many=True)
         if trips:
