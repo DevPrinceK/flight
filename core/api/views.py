@@ -166,7 +166,7 @@ class UserTicketsAPI(APIView):
     def post(self, request):
         user_id = request.data['user']
         user = User.objects.filter(id=int(user_id)).first()
-        tickets = Ticket.objects.filter(transaction__booking__user=user)
+        tickets = Ticket.objects.filter(transaction__booking__user=user).order_by('-id')  # noqa
         serializer = TicketSerializer(tickets, many=True)
         return Response(serializer.data)
 
