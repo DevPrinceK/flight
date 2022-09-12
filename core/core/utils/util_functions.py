@@ -8,7 +8,6 @@ def receive_payment(data):
     headers = {
         "Authorization": f"Token {settings.PAYHUB_SECRET_TOKEN}",
     }
-
     response = requests.post(ENDPOINT, data=data, headers=headers)
     response_data = response.json()
     print('From receive_payment', response_data)
@@ -20,7 +19,6 @@ def make_payment(data):
     headers = {
         "Authorization": f"Token {settings.PAYHUB_SECRET_TOKEN}",
     }
-
     response = requests.post(ENDPOINT, data=data, headers=headers)
     response_data = response.json()
     print("From make_payment", response_data)
@@ -36,6 +34,7 @@ def get_transaction_status(transaction_id):
         "transaction_id": transaction_id,
     }
     response = requests.get(ENDPOINT, params=params, headers=headers)
+    print('Raw response from get_transaction_status: ', response_data)
     response_data = response.json()
     print('From get_transaction_status: ', response_data)
     return response_data
