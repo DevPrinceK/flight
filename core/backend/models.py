@@ -79,6 +79,10 @@ class Trip(models.Model):
 
 
 class Booking(models.Model):
+    def generate_ticket_id():
+        time_id = str(int(time.time() * 1000))
+        return "G".join(random.choices(string.ascii_uppercase + time_id + string.digits, k=6))
+    booking_code = models.CharField(max_length=255, default=generate_ticket_id)
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, null=True, blank=True)  # noqa
     seats = models.ManyToManyField(Seat, blank=True)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True, blank=True)  # noqa
@@ -86,7 +90,11 @@ class Booking(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def get_seat_numbers(self):
-        return [seat.seat_num for seat in self.seats.all()]
+        data = self.seats.all()
+        seats = ""
+        for seat in data:
+            seats += str(seat.seat_num) + ", "
+        return seats.strip(", ")
 
     def __str__(self):
         return self.user.email if self.user.email else "booking"
