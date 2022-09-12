@@ -5,7 +5,7 @@ import random
 import uuid
 from django.db import models
 
-from accounts.models import User
+# from accounts.models import User
 
 
 class Agency(models.Model):
@@ -79,7 +79,7 @@ class Trip(models.Model):
 
 
 class Booking(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, null=True, blank=True)  # noqa
     seats = models.ManyToManyField(Seat, blank=True)
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date = models.DateTimeField(blank=True, null=True)
@@ -114,7 +114,7 @@ class Transaction(models.Model):
     def generate_transaction_id():
         time_id = str(int(time.time() * 100))
         return time_id.join(random.choices(string.ascii_uppercase + string.digits, k=8))
-    transaction_id = models.CharField(max_length=255, null=True, blank=True)
+    transaction_id = models.CharField(max_length=255, primary_key=True, default=generate_transaction_id)  # noqa
     external_id = models.CharField(max_length=255, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     network = models.CharField(max_length=255, null=True, blank=True)
