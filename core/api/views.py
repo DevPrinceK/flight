@@ -53,8 +53,6 @@ class UserProfileAPI(APIView):
         # extract token key from user tokenand use it to find the user
         token = request.data.get('token')
         try:
-            # token_str = request.META.get(
-            #     'HTTP_AUTHORIZATION').split(' ')[1][0:8]
             token_str = token[0:8]
         except AttributeError:
             return Response({'error': 'No token found'})
@@ -90,15 +88,11 @@ class SearchTripsAPI(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        # agency_id = request.data['agency']
-        # source = request.data['source']
-        # destination = request.data['destination']
         agency_id = request.data.get('agency')
         source = request.data.get('source')
         destination = request.data.get('destination')
         agency = Agency.objects.filter(id=int(agency_id)).first()
         # date format: YYYY-MM-DD
-        # date = request.data['date']
         date = request.data.get('date')
         trips = Trip.objects.filter(date=date, source=source, destination=destination, vehicle__agency=agency)  # noqa
         serializer = TripSerializer(trips, many=True)
@@ -118,7 +112,6 @@ class BookTripAPI(APIView):
         seat_ids = request.data['seats']
         trip = Trip.objects.filter(id=int(trip_id)).first()
         user = User.objects.filter(id=int(user_id)).first()
-        # seat = Seat.objects.filter(id=int(seat_id)).first()
         booking = Booking.objects.create(user=user, trip=trip)
         booking.save()
         for seat_id in seat_ids:
@@ -171,6 +164,17 @@ class UserTicketsAPI(APIView):
         return Response(serializer.data)
 
 
+class GetTicketAPI(APIView):
+    '''endpoint for getting a ticket'''
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        ticket_id = request.data['ticket_id']
+        transaction_id = request.data['ticket_id']
+        ticket = Ticket.objects.filter(ticket_id=ticket_id).first()
+        transaction_id = ticket.transaction
+
+
 class AllAgenciesAPI(APIView):
     '''endpoint for getting all agencies'''
     permission_classes = [permissions.AllowAny]
@@ -216,7 +220,6 @@ class PayForTripAPI(APIView):
         serializer = PaymentSerializer(data=request.data)
         # get the particular booking
         booking = Booking.objects.filter(id=int(booking_id)).first()
-
         if serializer.is_valid():
             serializer.save()
             transaction_id = self.generate_transaction_id()
