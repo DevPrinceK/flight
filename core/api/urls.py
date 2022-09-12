@@ -31,6 +31,7 @@ urlpatterns += [
 
 # USER TICKETS ENDPOINTS
 urlpatterns += [
+    path('get-ticket/', views.GetTicketAPI.as_view(), name="get_ticket"),  # noqa
     path('user-tickets/', views.UserTicketsAPI.as_view(), name="user_tickets"),  # noqa
 ]
 
