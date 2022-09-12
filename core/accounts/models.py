@@ -16,6 +16,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     agency = models.ForeignKey('backend.Agency', on_delete=models.CASCADE, null=True, blank=True)  # noqa
     date_joined = models.DateTimeField(auto_now_add=True)
 
+    def get_full_name(self):
+        return self.first_name + ' ' + self.last_name if self.first_name or self.last_name else 'N/A'  # noqa
+
     objects = AccountManager()
 
     USERNAME_FIELD = 'email'
