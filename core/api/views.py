@@ -168,11 +168,37 @@ class GetTicketAPI(APIView):
     '''endpoint for getting a ticket'''
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
-        ticket_id = request.data['ticket_id']
-        transaction_id = request.data['ticket_id']
-        ticket = Ticket.objects.filter(ticket_id=ticket_id).first()
-        transaction_id = ticket.transaction
+    def post(self, request):
+        try:
+            transaction_id = request.data['transaction_id']
+        except KeyError:
+            return Response({"error": "No transaction id provided"}, status=status.HTTP_400_BAD_REQUEST)
+        transaction = Transaction.objects.filter(
+            transaction_id=transaction_id).first()
+        if transaction:
+            ticket = Ticket.objects.filter(transaction=transaction).first()
+            booking = transaction.booking
+            trip = booking.trip
+            vehicle = trip.vehicle
+            agency = vehicle.agency
+            user = booking.user
+            seats = booking.get_seat_numbers()
+
+            ticket_data = {
+                'user': user.get_full_name(),
+                'agency': agency.name,
+                'vehicle_number': vehicle.vin,
+                'booking_code': booking.booking_code,
+                'source': trip.source,
+                'destination': trip.destination,
+                'date': trip.date,
+                'time': trip.time,
+                'seats': seats,
+                'amount': transaction.amount,
+                'ticket_id': ticket.ticket_id,
+            }
+            return Response({"ticket_data": ticket_data})
+        return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)  # noqa
 
 
 class AllAgenciesAPI(APIView):
