@@ -17,7 +17,7 @@ class TransactionListView(PermissionRequiredMixin, View):
     @method_decorator(MustLogin)
     def get(self, request, *args, **kwargs):
         if request.user.is_staff or request.user.is_superuser:
-            transactions = Transaction.objects.all().order_by('-id')
+            transactions = Transaction.objects.all().order_by('-created_at')
         elif request.user.is_agency_admin:
             transactions = Transaction.objects.filter(
                 booking__trip__vehicle__agency=request.user.agency)
