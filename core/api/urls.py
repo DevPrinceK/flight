@@ -35,6 +35,11 @@ urlpatterns += [
     path('user-tickets/', views.UserTicketsAPI.as_view(), name="user_tickets"),  # noqa
 ]
 
+# LOCATIONS
+urlpatterns += [
+    path('locations/', views.AllLocationsAPI.as_view(), name="locations"),
+]
+
 
 # AGENCY ENDPOINTS
 urlpatterns += [
