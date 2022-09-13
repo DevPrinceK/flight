@@ -4,10 +4,10 @@ import json
 from accounts.models import User
 import time
 from core import settings
-from backend.models import Agency, Booking, Seat, Transaction, Trip, Vehicle, Ticket
+from backend.models import Agency, Booking, Seat, Transaction, Trip, Vehicle, Ticket, VehicleCategory
 from django.shortcuts import render
 from django.views import View
-from api.serializers import BookingSerializer, PaymentSerializer, RegisterSerializer, SeatSerializer, TripSerializer, UserSerializer, TicketSerializer, AgencySerializer  # noqa
+from api.serializers import BookingSerializer, PaymentSerializer, RegisterSerializer, SeatSerializer, CategorySerializer, TripSerializer, UserSerializer, TicketSerializer, AgencySerializer  # noqa
 from core.utils.util_functions import get_transaction_status, receive_payment
 from rest_framework import generics, permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -43,6 +43,7 @@ class OverviewAPI(APIView):
             'all-agencies': '/api/all-agencies/',
             'get-ticket': '/api/get-ticket/',
             'locations': '/api/locations/',
+            'categories': '/api/categories/',
         }
         return Response(end_points)
 
@@ -91,12 +92,13 @@ class SearchTripsAPI(APIView):
 
     def post(self, request):
         agency_id = request.data.get('agency')
+        category_id = request.data.get('category')
         source = request.data.get('source')
         destination = request.data.get('destination')
         agency = Agency.objects.filter(id=int(agency_id)).first()
         # date format: YYYY-MM-DD
         date = request.data.get('date')
-        trips = Trip.objects.filter(date=date, source=source, destination=destination, vehicle__agency=agency)  # noqa
+        trips = Trip.objects.filter(date=date, source=source, destination=destination, vehicle__agency=agency, vehicle__category__id=category_id)  # noqa
         serializer = TripSerializer(trips, many=True)
         if trips:
             return Response(serializer.data)
@@ -205,6 +207,16 @@ class GetTicketAPI(APIView):
             }
             return Response({"ticket_data": ticket_data})
         return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)  # noqa
+
+
+class AllCategoriesAPI(APIView):
+    '''endpoint for getting all categories'''
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        categories = VehicleCategory.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data, status.HTTP_200_OK)
 
 
 class AllAgenciesAPI(APIView):
