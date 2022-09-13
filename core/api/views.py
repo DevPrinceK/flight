@@ -179,6 +179,10 @@ class GetTicketAPI(APIView):
             transaction_id=transaction_id).first()
         if transaction:
             ticket = Ticket.objects.filter(transaction=transaction).first()
+            if ticket:
+                ticket_id = ticket.
+            else:
+                ticket_id = None
             booking = transaction.booking
             trip = booking.trip
             vehicle = trip.vehicle
@@ -197,7 +201,7 @@ class GetTicketAPI(APIView):
                 'time': trip.time,
                 'seats': seats,
                 'amount': transaction.amount,
-                'ticket_id': ticket.ticket_id,
+                'ticket_id': ticket_id,
             }
             return Response({"ticket_data": ticket_data})
         return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)  # noqa
