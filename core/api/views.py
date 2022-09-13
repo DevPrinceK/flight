@@ -211,6 +211,20 @@ class AllAgenciesAPI(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class AllLocationsAPI(APIView):
+    '''endpoint for getting all locations'''
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        trips = Trip.objects.all()
+        locations = []
+        for trip in trips:
+            locations.append(trip.source)
+            locations.append(trip.destination)
+        locations = list(set(locations))
+        return Response({"locations": locations}, status=status.HTTP_200_OK)
+
+
 class LoginAPI(KnoxLoginView):
     '''Login api endpoint'''
     permission_classes = (permissions.AllowAny,)
