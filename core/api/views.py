@@ -41,6 +41,8 @@ class OverviewAPI(APIView):
             'user-tickets': '/api/user-tickets/',
             'user-profile': '/api/user-profile/',
             'all-agencies': '/api/all-agencies/',
+            'get-ticket': '/api/get-ticket/',
+            'locations': '/api/locations/',
         }
         return Response(end_points)
 
