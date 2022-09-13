@@ -55,6 +55,13 @@ class VehicleCategory(models.Model):
     name = models.CharField(max_length=255)
     date_created = models.DateTimeField(auto_now_add=True)
 
+    def get_agencies_in_category(self):
+        vehicles = Vehicle.objects.filter(category=self)
+        agencies = Agency.objects.none()
+        for vehicle in vehicles:
+            agencies |= Agency.objects.filter(id=vehicle.agency.id)
+        return agencies
+
     def __str__(self):
         return self.name if self.name else "category"
 
@@ -70,6 +77,9 @@ class Trip(models.Model):
     date = models.DateField(null=True, blank=True)
     time = models.TimeField(null=True, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
+
+    def get_trip_type(self):
+        return self.vehicle.category.name if self.vehicle else None
 
     def __str__(self):
         return self.source + "-" + self.destination if self.source and self.destination else "trip"  # noqa
