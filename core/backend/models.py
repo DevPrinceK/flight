@@ -121,7 +121,7 @@ class Ticket(models.Model):
 class Transaction(models.Model):
     def generate_transaction_id():
         time_id = str(int(time.time() * 100))
-        return time_id.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        return "".join(random.choices(string.ascii_uppercase + time_id + string.digits, k=12))
     transaction_id = models.CharField(max_length=255, primary_key=True, default=generate_transaction_id)  # noqa
     external_id = models.CharField(max_length=255, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
