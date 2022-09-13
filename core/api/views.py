@@ -182,12 +182,13 @@ class GetTicketAPI(APIView):
         if transaction:
             ticket = Ticket.objects.filter(transaction=transaction).first()
             if ticket:
-                ticket_id = ticket
+                ticket_id = ticket.ticket_id
             else:
                 ticket_id = None
             booking = transaction.booking
             trip = booking.trip
             vehicle = trip.vehicle
+            trip_type = trip.get_trip_type()
             agency = vehicle.agency
             user = booking.user
             seats = booking.get_seat_numbers()
@@ -204,6 +205,7 @@ class GetTicketAPI(APIView):
                 'seats': seats,
                 'amount': transaction.amount,
                 'ticket_id': ticket_id,
+                'trip_type': trip_type,
             }
             return Response({"ticket_data": ticket_data})
         return Response({"error": "Transaction not found"}, status=status.HTTP_404_NOT_FOUND)  # noqa
@@ -219,14 +221,18 @@ class AllCategoriesAPI(APIView):
         return Response(serializer.data, status.HTTP_200_OK)
 
 
-class AllAgenciesAPI(APIView):
+class GetAgenciesAPI(APIView):
     '''endpoint for getting all agencies'''
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        agencies = Agency.objects.all()
-        serializer = AgencySerializer(agencies, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    def post(self, request, *args, **kwargs):
+        category_id = request.data.get('category')
+        category = VehicleCategory.objects.filter(id=int(category_id)).first()  # noqa
+        if category:
+            agencies = category.get_agencies_in_category()
+            serializer = AgencySerializer(agencies, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"error": "Category not found!"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class AllLocationsAPI(APIView):
