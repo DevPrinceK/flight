@@ -50,7 +50,7 @@ urlpatterns += [
 
 # AGENCY ENDPOINTS
 urlpatterns += [
-    path('all-agencies/', views.AllAgenciesAPI.as_view(), name="agencies"),
+    path('all-agencies/', views.GetAgenciesAPI.as_view(), name="agencies"),
 ]
 
 # OTHER TRIP ENDPOINTS
