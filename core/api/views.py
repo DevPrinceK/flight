@@ -180,7 +180,7 @@ class GetTicketAPI(APIView):
         if transaction:
             ticket = Ticket.objects.filter(transaction=transaction).first()
             if ticket:
-                ticket_id = ticket.
+                ticket_id = ticket
             else:
                 ticket_id = None
             booking = transaction.booking
