@@ -1,7 +1,7 @@
 from email.policy import default
 from django.contrib.auth import authenticate
 from accounts.models import User
-from backend.models import Booking, Transaction, Trip, Seat, Ticket, Agency
+from backend.models import Booking, Transaction, Trip, Seat, Ticket, Agency, VehicleCategory
 from rest_framework import serializers
 from rest_framework.response import Response
 
@@ -92,3 +92,9 @@ class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
         fields = "__all__"
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleCategory
+        exclude = ["date_created"]
