@@ -69,6 +69,33 @@
                     </div>
                     <hr>
                     <b>
+                        <h4 class="mb-3">Certificates & IDs</h4>
+                    </b>
+                    <div class="row">
+                        <div class="col-6">
+                            <b>Business Certificate</b>
+                            {% if agency.business_certificate %}
+                            <div class="">
+                                <a href="{{agency.business_certificate.url}}" target="_blank"><img
+                                        src="{{agency.business_certificate.url}}" alt=""
+                                        style="height: 80px; width:auto;"></a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-6">
+                            <b>Business Admin Ghana Card</b>
+                            {% if agency.contact_person_ID %}
+                            <div class="">
+                                <a href="{{agency.contact_person_ID.url}}" target="_blank">
+                                    <img src="{{agency.contact_person_ID.url}}" alt=""
+                                        style="height: 80px; width:auto;">
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+                    <b>
                         <h4 class="mb-3">Agency Administrator</h4>
                     </b>
                     <div class="row">
