@@ -15,6 +15,9 @@ class Agency(models.Model):
     email = models.EmailField(max_length=255, null=True, blank=True)
     website = models.CharField(max_length=255, null=True, blank=True)
     wallet = models.ForeignKey('Wallet', on_delete=models.CASCADE, null=True, blank=True)  # noqa
+    business_certificate = models.ImageField(upload_to="agency_certificate/", null=True, blank=True)  # noqa
+    contact_person_ID = models.ImageField(upload_to="user_ID/", null=True, blank=True)  # noqa
+    is_approved = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
