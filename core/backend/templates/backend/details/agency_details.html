@@ -1,0 +1,127 @@
+{% extends 'backend/base.html' %}
+
+{% block active_item %}agencies{% endblock %}
+{% block page_title %}Agencies{% endblock %}
+
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'backend:backend' %}">Dashboard</a>
+    <a class="active"><i class="bi bi-chevron-right"></i> Agencies</a>
+</div>
+
+
+<div class="p-3">
+    <h4 class="page-header"><i class="bi bi-sliders me-2"></i> Agency Details</h4>
+    <div class="row">
+        <section class="col-md-12 mt-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between">
+                    <h5 class="card-title"><span>Agency Details</span></h5>
+                    {% if perms.backend.delete_agency %}
+                    <div class="actions">
+                        <a href="{% url 'backend:create_update_agency' %}?agency_id={{agency.id}}"
+                            class="btn btn-sm btn-primary text-white"><i class="bi bi-plus"></i> Edit</a>
+                        {% if perms.backend.delete_agency %}
+                        <form action="{% url 'backend:delete_agency' %}" method="POST" class="requires-confirmation"
+                            data-message="Click on okay to permanently delete this agency." style="display: inline;">
+                            <input type="hidden" name="agency_id" value="{{agency.id}}">
+                            {% csrf_token %}
+                            <button class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i>
+                                Delete
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4">
+                            <b>Agency Name</b>
+                            <p>{{agency.name}}</p>
+                        </div>
+                        <div class="col-4">
+                            <b>Agency PK</b>
+                            <p>{{agency.id}}</p>
+                        </div>
+                        <div class="col-4">
+                            <b>Agency Phone</b>
+                            <p>{{agency.phone}}</p>
+                        </div>
+                        <div class="col-4">
+                            <b>Agency Site</b>
+                            <p>{{agency.website}}</p>
+                        </div>
+                        <div class="col-4">
+                            <b>Agency Address</b>
+                            <p>{{agency.address}}</p>
+                        </div>
+                        <div class="col-4">
+                            <b>Agency Status</b> <br>
+                            {% if agency.is_approved %}
+                            <p class="btn btn-sm btn-primary">Approved</p>
+                            {% else %}
+                            <p class="btn btn-sm btn-danger">Not Approved</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+                    <b>
+                        <h4 class="mb-3">Agency Administrator</h4>
+                    </b>
+                    <div class="row">
+                        <div class="col-3">
+                            <b>Fullname</b>
+                            <p>{{user.firstname}} {{user.lastname}}</p>
+                        </div>
+                        <div class="col-3">
+                            <b>Email</b>
+                            <p>{{user.email}}</p>
+                        </div>
+                        <div class="col-3">
+                            <b>Username</b>
+                            <p>{{user.email}}</p>
+                        </div>
+                        <div class="col-3">
+                            <b>Date Registered</b>
+                            <p>{{user.date_joined}}</p>
+                        </div>
+                    </div>
+                    <section class="col-md-8 mt-5">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h5 class="card-title"><span>Status</span></h5>
+                            </div>
+                            <div class="card-body">
+                                <form action="" class="row" method="POST">
+                                    {% csrf_token %}
+                                    <div class="col-md-4 mt-2">
+                                        <input type="hidden" name="agency_id" value="{{agency.id}}">
+                                        <h6 class="p-0 m-0">APPROVED <span
+                                                class="badge bg-{{agency.is_approved|yesno:"success,danger"}}">{{agency.is_approved|yesno:"Yes,No"}}</span>
+                                        </h6>
+                                        <input type="checkbox" name="status_id"
+                                            {% if agency.is_approved %}checked{% endif %}>
+                                    </div>
+                                    <div class="col-md-4 mt-2">
+                                        <button type="submit" class="btn btn-primary"> <i class="bi bi-save"></i>
+                                            SAVE</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}
