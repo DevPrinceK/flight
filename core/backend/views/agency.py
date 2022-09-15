@@ -120,3 +120,37 @@ class DeleteAgency(PermissionRequiredMixin, View):
         else:
             messages.error(request, "Permission Denied!")
             return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+
+
+class ApproveDisapproveAgencyView(View):
+    permission_required = [
+        "backend.can_approve_disapprove_agency",
+    ]
+
+    template = "backend/details/agency_details.html"
+
+    @method_decorator(MustLogin)
+    def get(self, request, *args, **kwargs):
+        agency_id = request.GET.get('agency_id')
+        agency = Agency.objects.filter(id=int(agency_id)).first()
+        context = {
+            'agency': agency,
+        }
+        return render(request, self.template, context)
+
+    @method_decorator(MustLogin)
+    def post(self, request, *args, **kwargs):
+        agency_id = request.POST.get('agency_id')
+        status_id = request.POST.get('status_id')
+        status = True if status_id == 'on' else False
+        agency = Agency.objects.filter(id=int(agency_id)).first()
+        try:
+            agency.is_approved = status
+            agency.save()
+        except Exception as e:
+            print(e)
+            messages.error(request, "Agency Status Couldn't Be Changed!")
+            return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
+        if status:
+            messages.success(request, "Travel Agency Approved!")
+        return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
