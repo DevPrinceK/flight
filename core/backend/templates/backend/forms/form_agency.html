@@ -44,6 +44,38 @@
             Please this field is required.
         </div>
     </div>
+    <div class="form-group mt-3">
+        <label for="business_certificate">Business Certificate <span class="text text-danger">*</span> <span
+                class="text-primary">Upload picture of business certificate for verification</span> </label>
+        {% if agency.business_certificate %}
+        <br>
+        <span>Current File: </span>
+        <div class="">
+            <img src="{{agency.business_certificate.url}}" alt="" style="height: 70px; width:auto;">
+        </div>
+        {% endif %}
+        <input class="form-control" type="file" accept="image/*" name="business_certificate"
+            {% if not agency.business_certificate %} required {% endif %}>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
+    <div class="form-group mt-3">
+        <label for="contact_person_ID">Agency Admin's ID <span class="text text-danger">*</span> <span
+                class="text-primary">Upload picture of Ghana card</span> </label>
+        {% if agency.contact_person_ID %}
+        <br>
+        <span>Current File: </span>
+        <div class="">
+            <img src="{{agency.contact_person_ID.url}}" alt="" style="height: 70px; width:auto;">
+        </div>
+        {% endif %}
+        <input class="form-control" type="file" accept="image/*" name="contact_person_ID"
+            {% if not agency.business_certificate %} required {% endif %}>
+        <div class="invalid-feedback">
+            Please this field is required.
+        </div>
+    </div>
     {% if request.user.is_staff or request.user.is_superuser %}
     <div class="form-group mt-3">
         <label for="agency_admin">Agency Administrator <span class="text text-danger">*</span></label>
