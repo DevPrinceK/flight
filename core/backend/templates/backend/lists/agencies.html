@@ -37,6 +37,7 @@
                                 <th>Email</th>
                                 <th>Address</th>
                                 <th>Website</th>
+                                <th>Approved</th>
                                 <th>Date Created</th>
                                 <th>Action</th>
                             </tr>
@@ -51,6 +52,7 @@
                                 <td>{{agency.email}}</td>
                                 <td>{{agency.address}}</td>
                                 <td>{{agency.website}}</td>
+                                <td>{{agency.is_approved}}</td>
                                 <td>{{agency.date_joined|date:"d M Y"}}</td>
                                 <td class="text text-center d-flex">
                                     <a href="{% url 'backend:create_update_agency' %}?agency_id={{agency.id}}"
@@ -60,6 +62,15 @@
                                             Edit
                                         </button>
                                     </a>
+                                    {% if perms.backend.delete_agency %}
+                                    <a href="{% url 'backend:approve_disapprove_agency' %}?agency_id={{agency.id}}"
+                                        class="px-2">
+                                        <button class="btn btn-sm btn-primary">
+                                            <i class="bi bi-eye"></i>
+                                            Details
+                                        </button>
+                                    </a>
+                                    {% endif %}
                                     {% if perms.backend.delete_agency %}
                                     <form action="{% url 'backend:delete_agency' %}" method="POST"
                                         class="requires-confirmation"
