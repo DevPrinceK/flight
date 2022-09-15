@@ -42,17 +42,18 @@ class RegisterAgencyView(View):
                     user.groups.add(group)
                     user.save()
                     # login user after a successful registration
-                    user = authenticate(
-                        email=user_email,
-                        password=user_password,
-                    )
-                    if user:
-                        login(request, user)
-                        messages.success(
-                            request, f"Hello {user.first_name}, Welcome to EasyGo!")
-                        return redirect("backend:backend")
-                    else:
-                        return HTTPResponse("Something went wrong! Contact admins.")
+                    # user = authenticate(
+                    #     email=user_email,
+                    #     password=user_password,
+                    # )
+                    # if user:
+                    #     login(request, user)
+                    #     messages.success(
+                    #         request, f"Hello {user.first_name}, Welcome to EasyGo!")
+                    #     return redirect("backend:backend")
+                    # else:
+                    #     return HTTPResponse("Something went wrong! Contact admins.")
+                    messages.info(request, "Request Submitted Successfully")
                     return redirect("accounts:login")
         messages.success(request, "Agency Not Created Contact Admins!")
         return redirect("accounts:login")
