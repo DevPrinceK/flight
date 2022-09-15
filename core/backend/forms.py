@@ -10,7 +10,7 @@ from .models import Trip
 class AgencyForm(forms.ModelForm):
     class Meta:
         model = Agency
-        fields = ['name', 'address', 'phone', 'email', 'website']
+        fields = ['name', 'address', 'phone', 'email', 'website', 'contact_person_ID', 'business_certificate']  # noqa
 
 
 class VehicleForm(forms.ModelForm):
