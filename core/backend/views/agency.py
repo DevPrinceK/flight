@@ -153,4 +153,6 @@ class ApproveDisapproveAgencyView(View):
             return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
         if status:
             messages.success(request, "Travel Agency Approved!")
+        else:
+            messages.success(request, "Agency's approval status revoked!")
         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
