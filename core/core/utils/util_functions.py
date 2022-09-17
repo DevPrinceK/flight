@@ -12,7 +12,7 @@ def receive_payment(data):
     response_data = response.json()
     print('From receive_payment', response_data)
     return response_data
-
+ 
 
 def make_payment(data):
     ENDPOINT = 'https://payhubghana.io/api/v1.0/credit_mobile_account/'
@@ -34,7 +34,7 @@ def get_transaction_status(transaction_id):
         "transaction_id": transaction_id,
     }
     response = requests.get(ENDPOINT, params=params, headers=headers)
-    print('Raw response from get_transaction_status: ', response_data)
+    print('Raw response from get_transaction_status: ', response)
     response_data = response.json()
     print('From get_transaction_status: ', response_data)
     return response_data
