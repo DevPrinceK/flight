@@ -285,7 +285,7 @@ class PayForTripAPI(APIView):
         # get the particular booking
         booking = Booking.objects.filter(id=int(booking_id)).first()
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(commit=False)
             transaction_id = self.generate_transaction_id()
             data = {
                 'transaction_id': transaction_id,
@@ -299,7 +299,7 @@ class PayForTripAPI(APIView):
             receive_payment(data)
 
             transaction_is_successful = False
-            for i in range(5):
+            for i in range(6):
                 time.sleep(5)
                 transaction_status = get_transaction_status(transaction_id)  # noqa
                 print(transaction_status)
@@ -321,7 +321,7 @@ class PayForTripAPI(APIView):
                 'transaction_type': "CashIn",
             }
             print("Saving Transaction")
-            Transaction.objects.create(**transaction)
+            transaction = Transaction.objects.create(**transaction)
             # credit agency account if transaction is successful
             if transaction_is_successful:
                 try:
@@ -332,6 +332,7 @@ class PayForTripAPI(APIView):
                 except Exception as e:
                     print(e)
             print('Transaction Saved')
+            serializer = PaymentSerializer(transaction, many=False)
             return Response({"status": "success", "data": serializer.data}, status=status.HTTP_200_OK)
         # if transaction data is not valid
         return Response({"status": "error", "data": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
