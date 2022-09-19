@@ -44,12 +44,12 @@ def generate_ticket(sender, instance, created, **kwargs):
 
 
 @receiver(post_save, sender=Agency)
-def notify_devprincek(sender, instance, created, **kwargs):
+def notify_admins_and_agency(sender, instance, created, **kwargs):
     contact = instance.phone if instance.phone is not None else ''
     name = instance.name if instance.name is not None else ''
     email = instance.email if instance.email is not None else ''
     agency_admins = User.objects.filter(agency=instance)
-    nums = [str(agency_admin.phone) for agency_admin in agency_admins]
+    nums = [str(agency_admin.phone).strip() for agency_admin in agency_admins]
     nums.append(str(instance.phone))
     nums.append("0558366133")
     if created:
@@ -74,7 +74,12 @@ def notify_devprincek(sender, instance, created, **kwargs):
             agency_info = name + ' ' + contact + ' ' + email + ' \n'
             body = subject.upper() + ' \n\n' + message
             content = body + ' \n\n' + 'AGENCY INFO: \n' + agency_info
-            send_sms("EasyGo", content, nums)
+            try:
+                send_sms("EasyGo", content, nums)
+            except Exception as e:
+                print(e)
+            finally:
+                print("CONGRATULATIONS PART OF THE CODE RUNS")
 
 
 def send_sms(sender: str, message: str, recipients: array.array):
