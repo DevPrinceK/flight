@@ -1,4 +1,4 @@
-from unicodedata import decimal
+import decimal
 from django.core import serializers
 import json
 from accounts.models import User
@@ -285,7 +285,7 @@ class PayForTripAPI(APIView):
         # get the particular booking
         booking = Booking.objects.filter(id=int(booking_id)).first()
         if serializer.is_valid():
-            serializer.save(commit=False)
+            # serializer.save(commit=False)
             transaction_id = self.generate_transaction_id()
             data = {
                 'transaction_id': transaction_id,
