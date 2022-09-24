@@ -164,8 +164,19 @@ class UserTicketsAPI(APIView):
         user_id = request.data['user']
         user = User.objects.filter(id=int(user_id)).first()
         tickets = Ticket.objects.filter(transaction__booking__user=user).order_by('-id')  # noqa
-        serializer = TicketSerializer(tickets, many=True)
-        return Response(serializer.data)
+        # create a dictionary of ticket data
+        user_tickets = []
+        for ticket in tickets:
+            user_tickets.append({
+                'ticket_id': ticket.ticket_id,
+                'booked_on': ticket.transaction.booking.date_created,
+                'price': ticket.transaction.booking.trip.price,
+                'departure_date': ticket.transaction.booking.trip.date,
+                'departure_time': ticket.transaction.booking.trip.time,
+                'source': ticket.transaction.booking.trip.source,
+                'destination': ticket.transaction.booking.trip.destination,
+            })
+        return Response({"user_tickets": user_tickets})
 
 
 class GetTicketAPI(APIView):
