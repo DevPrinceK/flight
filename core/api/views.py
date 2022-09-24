@@ -326,8 +326,8 @@ class PayForTripAPI(APIView):
             if transaction_is_successful:
                 try:
                     # credit agency wallet with 95% of amount
-                    agency_amount = 0.95 * decimal.Decimal(serializer['amount'].value)  # noqa
-                    booking.trip.vehicle.agency.wallet.credit_wallet(decimal.Decimal(agency_amount))  # noqa
+                    agency_amount = decimal.Decimal(0.95) * decimal.Decimal(serializer['amount'].value)  # noqa
+                    booking.trip.vehicle.agency.wallet.credit_wallet(agency_amount)  # noqa
                     print(f"AGENCY ACCOUNT CREDITED WITH {agency_amount}")
                 except Exception as e:
                     print(e)
