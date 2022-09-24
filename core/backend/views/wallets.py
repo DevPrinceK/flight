@@ -109,6 +109,11 @@ class CashoutView(PermissionRequiredMixin, View):
         print('Transaction Saved')
         if cashout.status_code == "000":
             messages.success(request, "Cashout Successful")
+            try:
+                request.user.agency.wallet.debit_wallet(
+                    decimal.Decimal(cashout.amount))
+            except Exception as e:
+                print(e)
         else:
             messages.success(request, 'Transaction is pending')
         return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
