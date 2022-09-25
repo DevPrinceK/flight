@@ -175,6 +175,11 @@ class UserTicketsAPI(APIView):
                 'departure_time': ticket.transaction.booking.trip.time,
                 'source': ticket.transaction.booking.trip.source,
                 'destination': ticket.transaction.booking.trip.destination,
+                'user': ticket.transaction.booking.user.get_full_name(),
+                'agency': ticket.transaction.booking.trip.vehicle.agency.name,
+                'vehicle_number': ticket.transaction.booking.trip.vehicle.vin,
+                'seats': ticket.transaction.booking.get_seat_numbers(),
+                'booking_code': ticket.transaction.booking.booking_code,
             })
         return Response({"user_tickets": user_tickets})
 
