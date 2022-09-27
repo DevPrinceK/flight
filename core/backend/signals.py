@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.template import Context, loader
 
 
 from backend.models import Ticket, Wallet
@@ -110,16 +111,16 @@ def send_sms(sender: str, message: str, recipients: array.array):
 
 
 def send_generic_email(ticket, subject, template_name, receipients):
-    '''Send mail to business owner'''
+    '''Send mail to user who booked the trip'''
     text = render_to_string(template_name, {
         'ticket': ticket,
     })
-    t = loader.get_template('emails/myemail.html')
-    html = t.render(Context(email_dict))
+    t = loader.get_template(template_name)
+    html = t.render(Context({'ticket': ticket}))
     msg = EmailMultiAlternatives(
         subject, text,
         settings.EMAIL_HOST_USER, receipients)
-    msg.attach_alternative(text, "text/html")
+    msg.attach_alternative(html, "text/html")
     try:
         msg.send()
     except Exception as err:
