@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from django.template import Context, loader
+# from django.template import Context, loader
 
 
 from backend.models import Ticket, Wallet
@@ -115,12 +115,12 @@ def send_generic_email(ticket, subject, template_name, receipients):
     text = render_to_string(template_name, {
         'ticket': ticket,
     })
-    t = loader.get_template(template_name)
-    html = t.render(Context({'ticket': ticket}))
+    # t = loader.get_template(tempiclate_name)
+    # html = t.render(Context({'tket': ticket}))
     msg = EmailMultiAlternatives(
         subject, text,
         settings.EMAIL_HOST_USER, receipients)
-    msg.attach_alternative(html, "text/html")
+    msg.attach_alternative(text, "text/html")
     try:
         msg.send()
     except Exception as err:
