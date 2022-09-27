@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <style>
+    .main-container1 {
+      display: flex;
+
+      justify-content: center;
+      flex-direction: column;
+      height: fit-content;
+      width: 60%;
+      margin: 100px auto;
+      padding: 70px 100px;
+      background: white;
+      box-shadow: 10px 10px 10px 10px grey;
+    }
+
+    .container1 {
+      display: flex;
+      color: blue;
+      margin-bottom: 20px;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .ticket_details {
+      display: flex;
+    }
+
+    .ticket {
+      display: flex;
+      flex-direction: column;
+      flex: 0.8;
+      margin-left: 10px
+    }
+
+    .headd {
+      font-family: fantasy;
+    }
+
+    .sub-ticket {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .line1 {
+      height: 2px;
+      border-width: 0;
+      color: gray;
+      background-color: gray;
+    }
+
+    .trip {
+      display: flex;
+      color: blue;
+      flex-direction: column;
+      margin-left: 5px;
+
+    }
+
+    .sec {
+      display: flex;
+
+    }
+
+    .logo_img {
+      width: 120px;
+      height: 120px;
+      border: 2px solid blue;
+      object-fit: contain;
+      min-width: 80px;
+    }
+
+    .user1 {
+      align-content: center;
+    }
+  </style>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <!-- <<link rel="stylesheet" href="ticket.css"> -->
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+  <div class="main-container1">
+    <div class="container1">
+      <h2 class="headd">EasyGo Transport System</h2>
+      <h4 class="user1"><strong>User Trip Ticket</strong></h4>
+      <img src="http://www.easygotransport.com/static/images/logos/logo_icon.jpg" alt="" class="logo_img">
+
+    </div>
+    <div class="ticket_details">
+
+      <div class="ticket">
+        <h7> Agency : <strong>{{ticket.transaction.booking.trip.vehicle.agency.name}}</strong> </h7>
+        <h7>Date : <strong>{{ticket.transaction.booking.trip.date}}</strong></h7>
+        <h7>Seat Chosen : <strong>{{ticket.transaction.booking.get_seat_numbers}}</strong></h7>
+      </div>
+
+      <div class="sub-ticket">
+
+        <h7>Source : <strong>{{ticket.transaction.booking.trip.source}}</strong></h7>
+        <h7>Destination : <strong>{{ticket.transaction.booking.trip.destination}}</strong></h7>
+        <h7>Total Price : <strong>GHC{{ticket.transaction.booking.trip.price}}</strong></h7>
+        <h7>Ticket ID : {{ticket.ticket_id}}</h7>
+        <br>
+
+      </div>
+    </div>
+
+    <div class="trip">
+      <h4><strong>Trip</strong></h4>
+      <h5>Source : {{ticket.transaction.booking.trip.source}}</h5>
+      <h5>Destination : {{ticket.transaction.booking.trip.destination}}</h5>
+      <h5>Trip Time : {{ticket.transaction.booking.trip.time}}GMT</h5>
+
+    </div>
+    <section class="sec">
+      <strong>Please arrive at the station at least 30 minutes before time</strong>
+    </section>
+
+  </div>
+
+
+
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</body>
+
+</html>
