@@ -126,3 +126,11 @@ PAYHUB_SECRET_TOKEN = os.getenv(
     'PAYHUB_SECRET_TOKEN', "605c4bc8f16040ce7180715fbdfde75a2db8585da73a666deaa5f5556edfcd3f")
 PAYHUB_WALLET_ID = os.getenv('PAYHUB_WALLET_ID', "e55551f0-3ca5-4481-b1d4-eebde7339a96")  # noqa
 ARKESEL_API_KEY = os.getenv('ARKESEL_API_KEY', 'OkhnOUlLV1FhSlpLQktXN0M=')
+
+# email settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'easygo1online@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD', 'jbmtbeiwnclkshvp')
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
