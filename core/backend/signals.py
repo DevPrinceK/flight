@@ -4,6 +4,9 @@ import array
 from core import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
 
 from backend.models import Ticket, Wallet
 from backend.models import Agency
@@ -41,6 +44,16 @@ def generate_ticket(sender, instance, created, **kwargs):
             ticket = Ticket.objects.filter(transaction=instance).first()
             if not ticket:
                 Ticket.objects.create(transaction=instance)
+
+
+@receiver(post_save, sender=Ticket)
+def send_email(sender, instance, created, **kwargs):
+    '''send ticket to user via email'''
+    if created:
+        subject = "Trip Booking Ticket"
+        template_name = "backend/notifications/ticket.html"
+        receipients = [instance.transaction.booking.user.email]
+        send_generic_email(instance, subject, template_name, receipients)
 
 
 @receiver(post_save, sender=Agency)
@@ -94,3 +107,22 @@ def send_sms(sender: str, message: str, recipients: array.array):
     response = requests.post(SEND_SMS_URL, headers=header, json=payload)
     print(response.json())
     return response.json()
+
+
+def send_generic_email(ticket, subject, template_name, receipients):
+    '''Send mail to business owner'''
+    text = render_to_string(template_name, {
+        'ticket': ticket,
+    })
+    t = loader.get_template('emails/myemail.html')
+    html = t.render(Context(email_dict))
+    msg = EmailMultiAlternatives(
+        subject, text,
+        settings.EMAIL_HOST_USER, receipients)
+    msg.attach_alternative(text, "text/html")
+    try:
+        msg.send()
+    except Exception as err:
+        print(err)
+    else:
+        print("Successful....Email sent to: ", receipients)
